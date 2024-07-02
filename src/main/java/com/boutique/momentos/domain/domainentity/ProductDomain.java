@@ -7,9 +7,9 @@ public class ProductDomain {
     private float domainProductPrice;
     private int domainProductStock;
     private int domainProductCategoryId;
-    private int domainProductTypeId;
-    private int domainProductSizeId;
-    private int domainProductColorId;
+    private int domainProductUserId;
+    private byte[] domainProductImageData;
+    private boolean domainProductStatus;
 
     public int getDomainProductId() {
         return domainProductId;
@@ -47,22 +47,22 @@ public class ProductDomain {
     public void setDomainProductCategoryId(int domainProductCategoryId) {
         this.domainProductCategoryId = domainProductCategoryId;
     }
-    public int getDomainProductTypeId() {
-        return domainProductTypeId;
+    public int getDomainProductUserId() {
+        return domainProductUserId;
     }
-    public void setDomainProductTypeId(int domainProductTypeId) {
-        this.domainProductTypeId = domainProductTypeId;
+    public void setDomainProductUserId(int domainProductUserId) {
+        this.domainProductUserId = domainProductUserId;
     }
-    public int getDomainProductSizeId() {
-        return domainProductSizeId;
+    public byte[] getDomainProductImageData() {
+        return domainProductImageData;
     }
-    public void setDomainProductSizeId(int domainProductSizeId) {
-        this.domainProductSizeId = domainProductSizeId;
+    public void setDomainProductImageData(byte[] domainProductImageData) {
+        this.domainProductImageData = domainProductImageData;
     }
-    public int getDomainProductColorId() {
-        return domainProductColorId;
+    public boolean isDomainProductStatus() {
+        return domainProductStatus;
     }
-    public void setDomainProductColorId(int domainProductColorId) {
-        this.domainProductColorId = domainProductColorId;
+    public void setDomainProductStatus(boolean domainProductStatus) {
+        this.domainProductStatus = domainProductStatus;
     }
 }
