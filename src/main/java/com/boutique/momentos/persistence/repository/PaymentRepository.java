@@ -46,6 +46,6 @@ public class PaymentRepository implements PaymentDomainRepository {
 
     @Override
     public void deletePayment(int domainIdPayment) {
-        paymentDataRepository.findById(domainIdPayment);
+        paymentDataRepository.deleteById(domainIdPayment);
     }
 }

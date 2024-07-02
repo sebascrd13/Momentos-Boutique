@@ -8,9 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.boutique.momentos.domain.domainentity.ProductDomain;
 import com.boutique.momentos.domain.domainrepository.ProductDomainRepository;
 import com.boutique.momentos.persistence.datarepository.ProductDataRepository;
-import com.boutique.momentos.persistence.entity.Payment;
 import com.boutique.momentos.persistence.entity.Product;
 import com.boutique.momentos.persistence.mapper.ProductMapper;
+
+import jakarta.transaction.Transactional;
 
 public class ProductRepository implements ProductDomainRepository {
 
@@ -21,33 +22,37 @@ public class ProductRepository implements ProductDomainRepository {
     private ProductMapper productMapper;
 
     @Override
+    @Transactional
     public List<ProductDomain> getAll() {
         List<Product> products = (List<Product>) productDataRepository.findAll();
         return productMapper.toProductsDomain(products);
     }
 
     @Override
-    public ProductDomain saveProduct(ProductDomain product) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'saveProduct'");
+    public ProductDomain saveProduct(ProductDomain domainProduct) {
+        Product product = productMapper.toDomainProduct(domainProduct);
+        return productMapper.toProduct(productDataRepository.save(product));
     }
 
     @Override
-    public Optional<ProductDomain> getProductById(int productId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getProductById'");
+    public Optional<ProductDomain> getProductById(int domainProductId) {
+        return productDataRepository.findById(domainProductId).map(product -> productMapper.toProduct(product));
     }
 
     @Override
-    public void updateProduct(ProductDomain product) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateProduct'");
+    @Transactional
+    public void updateProduct(ProductDomain productDomain) {
+        Product product = productMapper.toDomainProduct(productDomain);
+        if (productDataRepository.existsById(product.getProductId())) {
+            productDataRepository.save(product);
+        } else {
+            throw new IllegalArgumentException("No hay un producto con el id: " + product.getProductId());
+        }
     }
 
     @Override
-    public void deleteProduct(int productId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deleteProduct'");
-    } 
-    
+    @Transactional
+    public void deleteProduct(int domainProductId) {
+        productDataRepository.deleteById(domainProductId);
+    }
 }
