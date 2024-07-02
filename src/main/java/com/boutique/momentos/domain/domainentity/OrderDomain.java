@@ -51,6 +51,4 @@ public class OrderDomain {
     public void setDomainOrderStatus(boolean domainOrderStatus) {
         this.domainOrderStatus = domainOrderStatus;
     }
-
-    
 }
