@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import com.boutique.momentos.domain.domainentity.OrderDomain;
 import com.boutique.momentos.domain.domainrepository.OrderDomainRepository;
@@ -11,6 +12,7 @@ import com.boutique.momentos.persistence.datarepository.OrderDataRepository;
 import com.boutique.momentos.persistence.entity.Order;
 import com.boutique.momentos.persistence.mapper.OrderMapper;
 
+@Repository
 public class OrderRepository implements OrderDomainRepository {
 
     @Autowired
@@ -32,7 +34,7 @@ public class OrderRepository implements OrderDomainRepository {
 
     @Override
     public List<OrderDomain> getOrdersByUserId(int userId) {
-        List<Order> orders = orderDataRepository.findOrdersByUserId(userId);
+        List<Order> orders = orderDataRepository.findOrdersByOrderUserId(userId);
         return orderMapper.toOrdersDomain(orders);
     }
 
