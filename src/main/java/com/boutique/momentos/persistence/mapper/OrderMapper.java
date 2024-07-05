@@ -27,7 +27,6 @@ public interface OrderMapper {
     List<OrderDomain> toOrdersDomain (List<Order> orders);
 
     @InheritInverseConfiguration
-    @Mapping(target = "products", ignore = true)
     @Mapping(target = "user", ignore = true)
     Order toDomainOrder (OrderDomain orderDomain);
 }

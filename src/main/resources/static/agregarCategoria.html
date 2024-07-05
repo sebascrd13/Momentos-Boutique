@@ -15,7 +15,7 @@
             margin-top: 1px;
             margin-bottom: 10px; /* Ajustamos el margen inferior para dejar espacio al footer */
         }
-        .btn-primary{
+        .btn-primary {
             margin-top: 4px;
             background-color: #fbc2eb;
             border-color: #fbc2eb;
@@ -35,7 +35,7 @@
         .footer {
             background-color: #000000dc;
             color: #fff;
-            text-align:center;
+            text-align: center;
             padding: 20px 0; /* Reducimos el padding superior e inferior */
             width: 100%;
             position: absolute;
@@ -59,7 +59,7 @@
                     <a class="nav-link" href="index.html">Inicio</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="adminCategoria.html">Atras</a>
+                    <a class="nav-link" href="adminCategoria.html">Atrás</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="contacto.html">Contacto</a>
@@ -73,12 +73,12 @@
     <h2 class="mb-4">Agregar Categoría</h2>
     
     <!-- Formulario para agregar una nueva categoría -->
-    <form>
+    <form id="categoryForm">
         <div class="mb-3">
             <label for="nombreCategoria" class="form-label">Nombre de la Categoría</label>
             <input type="text" class="form-control" id="nombreCategoria" placeholder="Ingrese el nombre de la categoría">
         </div>
-        <button type="submit" class="btn btn-primary">Guardar</button>
+        <button type="button" onclick="saveCategory()" class="btn btn-primary">Guardar</button>
     </form>
 </div>
  
@@ -91,6 +91,30 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.0-alpha1/js/bootstrap.min.js"></script>
+
+<script>
+    function saveCategory() {
+        var formData = new FormData();
+        formData.append("categoryId", 0); // Inicializamos con un valor por defecto o puedes modificarlo según tus necesidades
+        formData.append("categoryName", document.getElementById("nombreCategoria").value);
+
+        $.ajax({
+            type: "POST",
+            url: "/api/categories/upload",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                alert("Categoría guardada correctamente");
+                window.location.href = "http://localhost:8090/adminCategoria.html"; // Redirige a la página de administración
+            },
+            error: function(err) {
+                alert("Error al guardar la categoría");
+                console.error(err);
+            }
+        });
+    }
+</script>
 
 </body>
 </html>

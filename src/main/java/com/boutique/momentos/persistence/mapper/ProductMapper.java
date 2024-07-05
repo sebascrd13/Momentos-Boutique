@@ -29,8 +29,6 @@ public interface ProductMapper {
     List<ProductDomain> toProductsDomain (List<Product> products);
 
     @InheritInverseConfiguration
-    @Mapping(target = "order", ignore = true)
-    @Mapping(target = "category", ignore = true)
     @Mapping(target = "user", ignore = true)
     Product toDomainProduct (ProductDomain productDomain);
 }

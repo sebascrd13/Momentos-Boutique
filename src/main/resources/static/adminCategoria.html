@@ -8,15 +8,20 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         body {
-            background-color: #f8f9fa;
+            display: flex;
+            flex-direction: column;
             min-height: 100vh;
-            position: relative;
+            background-color: #f8f9fa;
+            margin: 0;
+        }
+        .content {
+            flex: 1;
         }
         .container {
             margin-top: 1px;
             margin-bottom: 10px; /* Ajustamos el margen inferior para dejar espacio al footer */
         }
-        .btn-primary{
+        .btn-primary {
             margin-top: 4px;
             background-color: #fbc2eb;
             border-color: #fbc2eb;
@@ -36,11 +41,9 @@
         .footer {
             background-color: #000000dc;
             color: #fff;
-            text-align:center;
-            padding: 20px 0; /* Reducimos el padding superior e inferior */
+            text-align: center;
+            padding: 20px 0;
             width: 100%;
-            position: absolute;
-            bottom: 0;
         }
     </style>
 </head>
@@ -60,7 +63,7 @@
                     <a class="nav-link" href="index.html">Inicio</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="admin.html">Atras</a>
+                    <a class="nav-link" href="admin.html">Atrás</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="contacto.html">Contacto</a>
@@ -70,56 +73,12 @@
     </div>
 </nav>
 
-<div class="container mt-5">
+<div class="container mt-5 content">
     <h2 class="mb-4">Administración de Categorías</h2>
     <a href="agregarCategoria.html" class="btn btn-primary mb-4">Agregar Categoría</a>
     
-    <div class="row">
-
-        <!-- Ejemplo de una categoría -->
-        <div class="col-md-4">
-            <div class="card mb-3">
-                <div class="card-body">
-                    <h5 class="card-title">Blusa</h5>
-                    <p class="card-text">ID: 13</p>
-                </div>
-                <div class="card-footer text-center">
-                    <a href="editarCategoria.html" class="btn btn-primary mx-1 rounded-2">Editar</a>
-                    <button type="button" class="btn btn-danger mx-1 rounded-2" onclick="eliminarCategoria(13)">Eliminar</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Ejemplo de otra categoría -->
-        <div class="col-md-4">
-            <div class="card mb-3">
-                <div class="card-body">
-                    <h5 class="card-title">Enagua</h5>
-                    <p class="card-text">ID: 127</p>
-                </div>
-                <div class="card-footer text-center">
-                    <a href="adminCategoria.html?id=127" class="btn btn-primary mx-1 rounded-2">Editar</a>
-                    <button type="button" class="btn btn-danger mx-1 rounded-2" onclick="eliminarCategoria(127)">Eliminar</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Ejemplo de otra categoría -->
-        <div class="col-md-4">
-            <div class="card mb-3">
-                <div class="card-body">
-                    <h5 class="card-title">Pantalón</h5>
-                    <p class="card-text">ID: 55</p>
-                </div>
-                <div class="card-footer text-center">
-                    <a href="adminCategoria.html?id=55" class="btn btn-primary mx-1 rounded-2">Editar</a>
-                    <button type="button" class="btn btn-danger mx-1 rounded-2" onclick="eliminarCategoria(55)">Eliminar</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Más categorías aquí... -->
-
+    <div class="row" id="categoriesContainer">
+        <!-- Aquí se cargarán dinámicamente las categorías -->
     </div>
 </div>
  
@@ -134,13 +93,58 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 <script>
-    // Simulación de función para eliminar categoría (puedes implementar esto con tu lógica real)
+    $(document).ready(function() {
+        loadCategories();
+    });
+
+    function loadCategories() {
+        $.ajax({
+            type: "GET",
+            url: "/api/categories",
+            success: function(categories) {
+                var categoriesContainer = $('#categoriesContainer');
+                categoriesContainer.empty();
+                categories.forEach(function(category) {
+                    var categoryCard = `
+                        <div class="col-md-4">
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <h5 class="card-title">${category.domainCategoryName}</h5>
+                                    <p class="card-text">ID: ${category.domainCategoryId}</p>
+                                </div>
+                                <div class="card-footer text-center">
+                                    <a href="editarCategoria.html?id=${category.domainCategoryId}" class="btn btn-primary mx-1 rounded-2">Editar</a>
+                                    <button type="button" class="btn btn-danger mx-1 rounded-2" onclick="eliminarCategoria(${category.domainCategoryId})">Eliminar</button>
+                                </div>
+                            </div>
+                        </div>`;
+                    categoriesContainer.append(categoryCard);
+                });
+            },
+            error: function(err) {
+                alert("Error al cargar las categorías");
+                console.error(err);
+            }
+        });
+    }
+
     function eliminarCategoria(id) {
         if (confirm('¿Estás seguro de eliminar esta categoría?')) {
-            // Aquí puedes implementar la lógica para eliminar la categoría con el ID especificado
-            alert('Categoría eliminada correctamente.');
+            $.ajax({
+                type: "DELETE",
+                url: `/api/categories/delete/${id}`,
+                success: function() {
+                    alert('Categoría eliminada correctamente.');
+                    loadCategories(); // Recargar las categorías después de eliminar
+                },
+                error: function(err) {
+                    alert("Error al eliminar la categoría");
+                    console.error(err);
+                }
+            });
         }
     }
 </script>
+
 </body>
 </html>

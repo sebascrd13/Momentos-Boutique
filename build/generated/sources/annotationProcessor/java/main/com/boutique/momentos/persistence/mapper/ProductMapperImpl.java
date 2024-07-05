@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-07-02T16:12:03-0600",
+    date = "2024-07-04T23:22:10-0600",
     comments = "version: 1.5.3.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-8.8.jar, environment: Java 21.0.1 (Red Hat, Inc.)"
 )
 @Component
@@ -29,7 +29,6 @@ public class ProductMapperImpl implements ProductMapper {
         productDomain.setDomainProductDescription( product.getProductDescription() );
         productDomain.setDomainProductPrice( product.getProductPrice() );
         productDomain.setDomainProductStock( product.getProductStock() );
-        productDomain.setDomainProductCategoryId( product.getProductCategoryId() );
         productDomain.setDomainProductUserId( product.getProductUserId() );
         byte[] domainProductImageData = product.getProductImageData();
         if ( domainProductImageData != null ) {
@@ -67,7 +66,6 @@ public class ProductMapperImpl implements ProductMapper {
         product.setProductDescription( productDomain.getDomainProductDescription() );
         product.setProductPrice( productDomain.getDomainProductPrice() );
         product.setProductStock( productDomain.getDomainProductStock() );
-        product.setProductCategoryId( productDomain.getDomainProductCategoryId() );
         product.setProductUserId( productDomain.getDomainProductUserId() );
         byte[] productImageData = productDomain.getDomainProductImageData();
         if ( productImageData != null ) {

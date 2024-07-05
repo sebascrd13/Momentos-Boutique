@@ -1,6 +1,5 @@
 package com.boutique.momentos.presentation.controller;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,7 +21,7 @@ import com.boutique.momentos.service.ProductService;
 @RestController
 @RequestMapping("/api/products")
 public class ProductController {
-    
+
     @Autowired
     private ProductService productService;
 
@@ -34,16 +33,27 @@ public class ProductController {
 
     @PostMapping("/upload")
     public ResponseEntity<ProductDomain> saveProduct(@RequestParam("userId") int userId,
-                                                    @RequestParam("image") MultipartFile imageFile) {
+                                                    @RequestParam("image") MultipartFile imageFile,
+                                                    @RequestParam("productName") String productName,
+                                                    @RequestParam("productDescription") String productDescription,
+                                                    @RequestParam("productPrice") float productPrice,
+                                                    @RequestParam("productStock") int productStock) {
         if (imageFile.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         try {
             byte[] imageData = imageFile.getBytes();
+
             ProductDomain productDomain = new ProductDomain();
             productDomain.setDomainProductUserId(userId);
+            productDomain.setDomainProductName(productName);
+            productDomain.setDomainProductDescription(productDescription);
+            productDomain.setDomainProductPrice(productPrice);
+            productDomain.setDomainProductStock(productStock);
             productDomain.setDomainProductImageData(imageData);
+
             ProductDomain savedProduct = productService.saveProduct(productDomain);
+
             return new ResponseEntity<>(savedProduct, HttpStatus.CREATED);
         } catch (Exception e) {
             e.printStackTrace();
