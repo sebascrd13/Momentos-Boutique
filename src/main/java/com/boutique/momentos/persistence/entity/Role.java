@@ -1,6 +1,7 @@
 package com.boutique.momentos.persistence.entity;
 
 import jakarta.persistence.*;
+import jakarta.persistence.Column;
 
 @Entity
 @Table(name = "roles")

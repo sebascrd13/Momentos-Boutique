@@ -24,14 +24,16 @@ public class ProductService {
     public Optional<ProductDomain> getProductById(int domainProductId){
         return productDomainRepository.getProductById(domainProductId);
     }
-    public boolean updateProduct(ProductDomain productDomain){
-        if (getProductById(productDomain.getDomainProductId()).isPresent()) {
+    public ProductDomain updateProduct(ProductDomain productDomain){
+        Optional<ProductDomain> existingProduct = getProductById(productDomain.getDomainProductId());
+        if (existingProduct.isPresent()) {
             productDomainRepository.updateProduct(productDomain);
-            return true;
+            return productDomain;
         } else {
-            return false;
+            throw new RuntimeException("Product not found");
         }
     }
+    
     public boolean deleteProduct(int domainProductId){
         if (getProductById(domainProductId).isPresent()){
             productDomainRepository.deleteProduct(domainProductId);

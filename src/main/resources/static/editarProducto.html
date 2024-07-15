@@ -1,34 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editar Producto - Momentos Boutique</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        /* Estilos personalizados */
         body {
-            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            min-height: 100vh;
+            padding-bottom: 100px; /* Añadido para espacio en la parte inferior */
         }
-        .form-group label {
-            font-weight: bold;
-        }
-        .form-group input[type="text"],
-        .form-group input[type="number"],
-        .form-group select {
-            width: 100%;
-            padding: 8px;
-            margin-top: 6px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-        .form-group select {
-            cursor: pointer;
+        .container {
+            margin-top: 20px;
+            margin-bottom: 100px; /* Ajustado para más espacio */
+            flex: 1;
         }
         .btn-primary {
+            margin-top: 4px;
             background-color: #fbc2eb;
             border-color: #fbc2eb;
             color: #000;
@@ -44,62 +33,203 @@
         .btn-primary:focus {
             box-shadow: none;
         }
+        .footer {
+            background-color: #000000dc;
+            color: #fff;
+            text-align: center;
+            padding: 20px 0;
+            width: 100%;
+        }
     </style>
 </head>
-
 <body>
 
-    <div class="container mt-5">
-        <div class="row">
-            <div class="col text-center">
-                <a href="#" class="btn btn-secondary mb-3" onclick="window.history.back();">Atrás</a>
-            </div>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="index.html">
+            <img src="img/Logo.jpg" alt="Logo de Momentos Boutique" style="width: 100px; height: 70px;">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html">Inicio</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="admin.html">Atrás</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="contacto.html">Contacto</a>
+                </li>
+            </ul>
         </div>
-        <h2 class="mb-4">Editar Producto</h2>
-        <form>
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="nombre">Nombre del Producto</label>
-                        <input type="text" class="form-control" id="nombre" placeholder="Ingrese el nombre del producto">
-                    </div>
-                    <div class="form-group">
-                        <label for="precio">Precio</label>
-                        <input type="number" class="form-control" id="precio" placeholder="Ingrese el precio del producto">
-                    </div>
-                    <div class="form-group">
-                        <label for="existencias">Existencias</label>
-                        <input type="number" class="form-control" id="existencias" placeholder="Ingrese la cantidad de existencias">
-                    </div>
-                    <div class="form-group">
-                        <label for="categoria">Categoría Actual</label>
-                        <input type="text" class="form-control" id="categoriaActual" value="Ropa" disabled>
-                    </div>
-                    <div class="form-group">
-                        <label for="nuevaCategoria">Nueva Categoría</label>
-                        <select class="form-control" id="nuevaCategoria">
-                            <option value="ropa">Ropa</option>
-                            <option value="accesorios">Accesorios</option>
-                            <option value="zapatos">Zapatos</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="tallas">Tallas Disponibles</label>
-                        <input type="text" class="form-control" id="tallas" placeholder="Ingrese las tallas disponibles">
-                    </div>
-                    <div class="form-group">
-                        <label for="imagen">Imagen del Producto</label>
-                        <input type="file" class="form-control" id="imagen">
-                    </div>
-                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-                </div>
-            </div>
-        </form>
     </div>
+</nav>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+<div class="container mt-5">
+    <h2 class="mb-4">Editar Producto</h2>
+    
+    <!-- Formulario para editar el producto -->
+    <form id="editProductForm" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label for="productName" class="form-label">Nombre del Producto</label>
+            <input type="text" class="form-control" id="productName" name="productName" required>
+        </div>
+        <div class="mb-3">
+            <label for="productDescription" class="form-label">Descripción del Producto</label>
+            <input type="text" class="form-control" id="productDescription" name="productDescription" required>
+        </div>
+        <div class="mb-3">
+            <label for="productPrice" class="form-label">Precio</label>
+            <input type="number" class="form-control" id="productPrice" name="productPrice" required>
+        </div>
+        <div class="mb-3">
+            <label for="productStock" class="form-label">Existencias</label>
+            <input type="number" class="form-control" id="productStock" name="productStock" required>
+        </div>
+        <div class="mb-3">
+            <label for="currentCategory" class="form-label">Categoría Actual</label>
+            <input type="text" class="form-control" id="currentCategory" name="currentCategory" disabled>
+        </div>
+        <div class="mb-3">
+            <label for="categoryId" class="form-label">Nueva Categoría</label>
+            <select class="form-control" id="categoryId" name="categoryId" required>
+                <!-- Las opciones se cargarán dinámicamente -->
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="productSize" class="form-label">Tallas Disponibles</label>
+            <input type="text" class="form-control" id="productSize" name="productSize" required>
+        </div>
+        <div class="mb-3">
+            <label for="productImage" class="form-label">Imagen del Producto</label>
+            <input type="file" class="form-control" id="productImage" name="image">
+        </div>
+        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+    </form>
+</div>
+
+<footer class="footer">
+    <div class="container">
+        <p>&copy; 2024 Momentos Boutique. Todos los derechos reservados.</p>
+    </div>
+</footer>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.0-alpha1/js/bootstrap.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const productId = urlParams.get('productId');
+        const userId = 1; // Ejemplo: Puedes ajustar esto para obtener el userId adecuado
+
+        if (productId) {
+            loadProductData(productId);
+        }
+
+        loadCategories();
+
+        $('#editProductForm').on('submit', function(event) {
+            event.preventDefault();
+            updateProductData(productId, userId);
+        });
+    });
+
+    function loadCategories() {
+        $.ajax({
+            type: "GET",
+            url: 'http://localhost:8090/api/categories',
+            success: function(categories) {
+                var categorySelect = $('#categoryId');
+                categories.forEach(function(category) {
+                    var option = $('<option></option>')
+                        .attr('value', category.domainCategoryId)
+                        .text(category.domainCategoryName);
+                    categorySelect.append(option);
+                });
+            },
+            error: function(err) {
+                console.error('Error al cargar las categorías:', err);
+            }
+        });
+    }
+
+    function loadProductData(productId) {
+        $.ajax({
+            type: "GET",
+            url: `/api/products/${productId}`,
+            success: function(product) {
+                console.log("Producto cargado correctamente:", product);
+
+                $('#productName').val(product.domainProductName);
+                $('#productDescription').val(product.domainProductDescription);
+                $('#productPrice').val(product.domainProductPrice);
+                $('#productStock').val(product.domainProductStock);
+                $('#productSize').val(product.domainProductSize);
+
+                loadCurrentCategory(product.domainProductCategoryId);
+                loadProductSizes(product.domainProductSize);
+
+                $('#categoryId').val(product.domainProductCategoryId);
+            },
+            error: function(err) {
+                alert("Error al cargar los datos del producto");
+                console.error(err);
+            }
+        });
+    }
+
+    function loadCurrentCategory(categoryId) {
+        $.ajax({
+            type: "GET",
+            url: `/api/categories/${categoryId}`,
+            success: function(category) {
+                $('#currentCategory').val(category.domainCategoryName);
+            },
+            error: function(err) {
+                console.error('Error al cargar la categoría actual:', err);
+            }
+        });
+    }
+
+    function loadProductSizes(sizes) {
+        if (sizes) {
+            $('#productSize').val(sizes);
+        } else {
+            $('#productSize').val(''); 
+        }
+    }
+
+    function updateProductData(productId, userId) {
+        var formData = new FormData($('#editProductForm')[0]);
+        formData.append('userId', userId); // Agregar userId al formData
+
+        var imageFile = $('#productImage')[0].files[0];
+        if (imageFile) {
+            formData.append('imageFile', imageFile); // Agregar la nueva imagen al formData si está presente
+        }
+
+        $.ajax({
+            type: "PUT",
+            url: `/api/products/${productId}`,
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function(response) {
+                alert("Producto actualizado exitosamente");
+                window.location.href = "admin.html";
+            },
+            error: function(err) {
+                alert("Error al actualizar el producto");
+                console.error(err);
+            }
+        });
+    }
+</script>
+
 </body>
-
 </html>

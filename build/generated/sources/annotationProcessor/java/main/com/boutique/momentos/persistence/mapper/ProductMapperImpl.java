@@ -3,14 +3,13 @@ package com.boutique.momentos.persistence.mapper;
 import com.boutique.momentos.domain.domainentity.ProductDomain;
 import com.boutique.momentos.persistence.entity.Product;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-07-04T23:22:10-0600",
+    date = "2024-07-06T20:15:11-0600",
     comments = "version: 1.5.3.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-8.8.jar, environment: Java 21.0.1 (Red Hat, Inc.)"
 )
 @Component
@@ -29,11 +28,10 @@ public class ProductMapperImpl implements ProductMapper {
         productDomain.setDomainProductDescription( product.getProductDescription() );
         productDomain.setDomainProductPrice( product.getProductPrice() );
         productDomain.setDomainProductStock( product.getProductStock() );
+        productDomain.setDomainProductCategoryId( product.getProductCategoryId() );
         productDomain.setDomainProductUserId( product.getProductUserId() );
-        byte[] domainProductImageData = product.getProductImageData();
-        if ( domainProductImageData != null ) {
-            productDomain.setDomainProductImageData( Arrays.copyOf( domainProductImageData, domainProductImageData.length ) );
-        }
+        productDomain.setDomainProductImagePath( product.getProductImagePath() );
+        productDomain.setDomainProductSize( product.getProductSize() );
         productDomain.setDomainProductStatus( product.isProductStatus() );
 
         return productDomain;
@@ -66,11 +64,10 @@ public class ProductMapperImpl implements ProductMapper {
         product.setProductDescription( productDomain.getDomainProductDescription() );
         product.setProductPrice( productDomain.getDomainProductPrice() );
         product.setProductStock( productDomain.getDomainProductStock() );
+        product.setProductCategoryId( productDomain.getDomainProductCategoryId() );
         product.setProductUserId( productDomain.getDomainProductUserId() );
-        byte[] productImageData = productDomain.getDomainProductImageData();
-        if ( productImageData != null ) {
-            product.setProductImageData( Arrays.copyOf( productImageData, productImageData.length ) );
-        }
+        product.setProductImagePath( productDomain.getDomainProductImagePath() );
+        product.setProductSize( productDomain.getDomainProductSize() );
         product.setProductStatus( productDomain.isDomainProductStatus() );
 
         return product;

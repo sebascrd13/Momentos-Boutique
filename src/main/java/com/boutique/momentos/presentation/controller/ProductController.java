@@ -1,5 +1,9 @@
 package com.boutique.momentos.presentation.controller;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 
@@ -10,6 +14,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,6 +30,8 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
+    private static String UPLOADED_FOLDER = "src/main/resources/static/img/";
+
     @GetMapping
     public ResponseEntity<List<ProductDomain>> getAllProducts() {
         List<ProductDomain> products = productService.getAll();
@@ -32,29 +39,80 @@ public class ProductController {
     }
 
     @PostMapping("/upload")
-    public ResponseEntity<ProductDomain> saveProduct(@RequestParam("userId") int userId,
-                                                    @RequestParam("image") MultipartFile imageFile,
-                                                    @RequestParam("productName") String productName,
-                                                    @RequestParam("productDescription") String productDescription,
-                                                    @RequestParam("productPrice") float productPrice,
-                                                    @RequestParam("productStock") int productStock) {
-        if (imageFile.isEmpty()) {
+    public ResponseEntity<ProductDomain> saveProduct(@RequestParam("imageFile") MultipartFile file,
+                                             @RequestParam("userId") Integer userId,
+                                             @RequestParam("productName") String productName,
+                                             @RequestParam("productDescription") String productDescription,
+                                             @RequestParam("productPrice") Float productPrice,
+                                             @RequestParam("productStock") Integer productStock,
+                                             @RequestParam("categoryId") Integer categoryId,
+                                             @RequestParam("productSize") Character productSize) {
+
+        if (file.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+
         try {
-            byte[] imageData = imageFile.getBytes();
+            byte[] bytes = file.getBytes();
+            String filename = file.getOriginalFilename();
+            Path path = Paths.get(UPLOADED_FOLDER + filename);
+            Files.write(path, bytes);
 
             ProductDomain productDomain = new ProductDomain();
+            productDomain.setDomainProductUserId(userId);
+            productDomain.setDomainProductName(productName);
+            productDomain.setDomainProductImagePath("img/" + filename);
+            productDomain.setDomainProductDescription(productDescription);
+            productDomain.setDomainProductPrice(productPrice);
+            productDomain.setDomainProductStock(productStock);
+            productDomain.setDomainProductCategoryId(categoryId);
+            productDomain.setDomainProductSize(productSize);
+
+            ProductDomain savedProduct = productService.saveProduct(productDomain);
+
+            return new ResponseEntity<>(savedProduct, HttpStatus.CREATED);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ProductDomain> updateProduct(@PathVariable("id") int id,
+                                                       @RequestParam("userId") int userId,
+                                                       @RequestParam("imageFile") MultipartFile file,
+                                                       @RequestParam("productName") String productName,
+                                                       @RequestParam("productDescription") String productDescription,
+                                                       @RequestParam("productPrice") float productPrice,
+                                                       @RequestParam("productSize") char productSize,
+                                                       @RequestParam("productStock") int productStock,
+                                                       @RequestParam("categoryId") int categoryId) {
+        try {
+            String imagePath = null;
+            if (!file.isEmpty()) {
+                byte[] bytes = file.getBytes();
+                String filename = file.getOriginalFilename();
+                Path path = Paths.get(UPLOADED_FOLDER + filename);
+                Files.write(path, bytes);
+                imagePath = "img/" + filename;
+            }
+
+            ProductDomain productDomain = new ProductDomain();
+            productDomain.setDomainProductId(id);
             productDomain.setDomainProductUserId(userId);
             productDomain.setDomainProductName(productName);
             productDomain.setDomainProductDescription(productDescription);
             productDomain.setDomainProductPrice(productPrice);
             productDomain.setDomainProductStock(productStock);
-            productDomain.setDomainProductImageData(imageData);
+            productDomain.setDomainProductSize(productSize);
+            if (imagePath != null) {
+                productDomain.setDomainProductImagePath(imagePath);
+            }
+            productDomain.setDomainProductCategoryId(categoryId);
 
-            ProductDomain savedProduct = productService.saveProduct(productDomain);
+            ProductDomain updatedProduct = productService.updateProduct(productDomain);
 
-            return new ResponseEntity<>(savedProduct, HttpStatus.CREATED);
+            return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -64,17 +122,12 @@ public class ProductController {
     @GetMapping("/{id}")
     public ResponseEntity<ProductDomain> getProductById(@PathVariable("id") int id) {
         Optional<ProductDomain> product = productService.getProductById(id);
-        return product.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        return product.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable("id") int id) {
         boolean deleted = productService.deleteProduct(id);
-        if (deleted) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return deleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
 }

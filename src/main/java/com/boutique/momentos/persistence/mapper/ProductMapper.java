@@ -20,7 +20,8 @@ public interface ProductMapper {
         @Mapping(source = "productStock", target = "domainProductStock"),
         @Mapping(source = "productCategoryId", target = "domainProductCategoryId"),
         @Mapping(source = "productUserId", target = "domainProductUserId"),
-        @Mapping(source = "productImageData", target = "domainProductImageData"),
+        @Mapping(source = "productImagePath", target = "domainProductImagePath"),
+        @Mapping(source = "productSize", target = "domainProductSize"),
         @Mapping(source = "productStatus", target = "domainProductStatus"),
     })
 

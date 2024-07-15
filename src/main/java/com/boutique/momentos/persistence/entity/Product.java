@@ -33,14 +33,17 @@ public class Product {
     @Column(name = "stock")
     private int productStock;
 
-    @Column(name = "id_categoria")
+    @Column(name = "id_categoria", nullable = true)
     private int productCategoryId;
 
     @Column(name = "id_usuario")
     private int productUserId;
 
     @Column(name = "imagen")
-    private byte[] productImageData;
+    private String productImagePath;
+
+    @Column(name = "talla")
+    private char productSize;
 
     @Column(name = "status")
     private boolean productStatus;
@@ -112,12 +115,12 @@ public class Product {
         this.productUserId = productUserId;
     }
 
-    public byte[] getProductImageData() {
-        return productImageData;
+    public String getProductImagePath() {
+        return productImagePath;
     }
 
-    public void setProductImageData(byte[] productImageData) {
-        this.productImageData = productImageData;
+    public void setProductImagePath(String productImagePath) {
+        this.productImagePath = productImagePath;
     }
 
     public boolean isProductStatus() {
@@ -141,5 +144,12 @@ public class Product {
 
     public void setUser(User user) {
         this.user = user;
+    }
+    public char getProductSize() {
+        return productSize;
+    }
+
+    public void setProductSize(char productSize) {
+        this.productSize = productSize;
     }
 }

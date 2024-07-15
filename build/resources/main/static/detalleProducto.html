@@ -54,7 +54,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
             <a class="navbar-brand" href="index.html">
-                <img src="img/Logo.jpg" alt="Logo de Momentos Boutique" style="width: 100px; height: 70px;">
+                <img src="http://localhost:8090/img/Logo.jpg" alt="Logo de Momentos Boutique" style="width: 100px; height: 70px;">
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -75,7 +75,7 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="carrito.html">
-                            <img src="img/Carrito.png" alt="Carrito de compras" class="cart-icon">
+                            <img src="http://localhost:8090/img/Carrito.png" alt="Carrito de compras" class="cart-icon">
                         </a>
                     </li>
                 </ul>
@@ -89,14 +89,14 @@
             <div class="col-md-8">
                 <div class="card position-relative">
                     <a href="productos.html" class="btn btn-primary btn-back">Atrás</a>
-                    <img src="img/Enagua.jpg" class="card-img-top" alt="Producto 1">
+                    <img id="productImage" class="card-img-top" alt="Producto">
                     
                     <div class="card-body">
-                        <h5 class="card-title">Producto </h5>
-                        <p class="card-text">Descripción detallada del producto.</p>
-                        <p class="card-text">Precio: $50</p>
-                        <p class="card-text">Existencias: 10</p>
-                        <p class="card-text">Tallas Disponibles: S, M, L</p>
+                        <h5 id="productName" class="card-title"></h5>
+                        <p id="productDescription" class="card-text"></p>
+                        <p id="productPrice" class="card-text"></p>
+                        <p id="productStock" class="card-text"></p>
+                        <p id="productSizes" class="card-text"></p>
                         <button type="button" class="btn btn-primary">Agregar al Carrito</button>
                     </div>
                 </div>
@@ -111,5 +111,33 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            var urlParams = new URLSearchParams(window.location.search);
+            var productId = urlParams.get('productId');
+            if (productId) {
+                loadProductDetails(productId);
+            }
+        });
+
+        function loadProductDetails(productId) {
+            $.ajax({
+                type: "GET",
+                url: `http://localhost:8090/api/products/${productId}`,
+                success: function(product) {
+                    $("#productImage").attr("src", `http://localhost:8090/${product.domainProductImagePath}`);
+                    $("#productName").text(product.domainProductName);
+                    $("#productDescription").text(product.domainProductDescription);
+                    $("#productPrice").text(`Precio: $${product.domainProductPrice}`);
+                    $("#productStock").text(`Existencias: ${product.domainProductStock}`);
+                    $("#productSizes").text(`Tallas Disponibles: ${product.domainProductSize}`);
+                },
+                error: function(err) {
+                    alert("Error al cargar los detalles del producto");
+                    console.error(err);
+                }
+            });
+        }
+    </script>
 </body>
 </html>

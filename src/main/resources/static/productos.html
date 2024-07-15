@@ -9,7 +9,7 @@
         body {
             font-family: Arial, sans-serif;
         }
-        .btn-primary{
+        .btn-primary {
             margin-top: 40px;
             background-color: #fbc2eb;
             border-color: #fbc2eb;
@@ -26,25 +26,23 @@
         .btn-primary:focus {
             box-shadow: none;
         }
-        /* Estilos Carrito Compras */
         .nav-link img {
-            width: 20px; /* Ajusta el ancho del ícono */
-            height: 20px; /* Ajusta la altura del ícono */
+            width: 20px;
+            height: 20px;
         }
         .nav-link img.cart-icon {
-            filter: invert(50%); /* Invierte el color del ícono a blanco */
+            filter: invert(50%);
         }
         .card-img-top {
-             width: 300px;
-             height: 200px;
-             object-fit: cover; /* Para asegurar que la imagen se ajuste correctamente */
-            margin: auto; /* Para centrar horizontalmente */
-            display: block; 
+            width: 300px;
+            height: 200px;
+            object-fit: cover;
+            margin: auto;
+            display: block;
         }
     </style>
 </head>
 <body>
-
     <!-- Barra de navegación -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
@@ -62,7 +60,6 @@
                     <li class="nav-item">
                         <a class="nav-link" aria-current="page" href="admin.html">Admin</a>
                     </li>
-                    
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="#">Productos</a>
                     </li>
@@ -82,73 +79,8 @@
     <!-- Contenido principal -->
     <div class="container mt-4">
         <h1 class="mb-4">Nuestros Productos</h1>
-        <div class="row">
-            <!-- Producto 1 -->
-            <div class="col-md-4 mb-4">
-                <div class="card">
-                    <img src="img/Enagua.jpg" class="card-img-top" alt="Producto 1">
-                    <div class="card-body">
-                        <h5 class="card-title">Producto 1</h5>
-                        <p class="card-text">Descripción del Producto 1.</p>
-                        <a href="detalleProducto.html" class="btn btn-primary">Ver Detalles</a>
-                    </div>
-                </div>
-            </div>
-            <!-- Producto 2 -->
-            <div class="col-md-4 mb-4">
-                <div class="card">
-                    <img src="img/sweater.jpg" class="card-img-top" alt="Producto 2">
-                    <div class="card-body">
-                        <h5 class="card-title">Producto 2</h5>
-                        <p class="card-text">Descripción del Producto 2.</p>
-                        <a href="detalleProducto.html" class="btn btn-primary">Ver Detalles</a>
-                    </div>
-                </div>
-            </div>
-            <!-- Producto 3 -->
-            <div class="col-md-4 mb-4">
-                <div class="card">
-                    <img src="img/Vestido.jpg" class="card-img-top" alt="Producto 3">
-                    <div class="card-body">
-                        <h5 class="card-title">Producto 3</h5>
-                        <p class="card-text">Descripción del Producto 3.</p>
-                        <a href="detalleProducto.html" class="btn btn-primary">Ver Detalles</a>
-                    </div>
-                </div>
-            </div>
-            <!-- Producto 4 -->
-            <div class="col-md-4 mb-4">
-                <div class="card">
-                    <img src="img/Vestido.jpg" class="card-img-top" alt="Producto 3">
-                    <div class="card-body">
-                        <h5 class="card-title">Producto 4</h5>
-                        <p class="card-text">Descripción del Producto 4.</p>
-                        <a href="#" class="btn btn-primary">Ver Detalles</a>
-                    </div>
-                </div>
-            </div>
-            <!-- Producto 5 -->
-            <div class="col-md-4 mb-4">
-                <div class="card">
-                    <img src="img/sweater.jpg" class="card-img-top" alt="Producto 3">
-                    <div class="card-body">
-                        <h5 class="card-title">Producto 5</h5>
-                        <p class="card-text">Descripción del Producto 5.</p>
-                        <a href="#" class="btn btn-primary">Ver Detalles</a>
-                    </div>
-                </div>
-            </div>
-            <!-- Producto  6-->
-            <div class="col-md-4 mb-4">
-                <div class="card">
-                    <img src="img/Enagua.jpg" class="card-img-top" alt="Producto 3">
-                    <div class="card-body">
-                        <h5 class="card-title">Producto 6</h5>
-                        <p class="card-text">Descripción del Producto 6.</p>
-                        <a href="detalleProducto.html" class="btn btn-primary">Ver Detalles</a>
-                    </div>
-                </div>
-            </div>
+        <div class="row" id="productContainer">
+            <!-- Los productos se cargarán aquí dinámicamente -->
         </div>
     </div>
     <footer class="bg-dark text-light text-center py-3">
@@ -158,5 +90,40 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+    
+    <script>
+        $(document).ready(function() {
+            loadProducts();
+        });
+
+        function loadProducts() {
+            $.ajax({
+                type: "GET",
+                url: "http://localhost:8090/api/products",
+                success: function(products) {
+                    var productContainer = $("#productContainer");
+                    products.forEach(function(product) {
+                        var productCard = `
+                            <div class="col-md-4 mb-4">
+                                <div class="card">
+                                    <img src="http://localhost:8090/${product.domainProductImagePath}" class="card-img-top" alt="Producto">
+                                    <div class="card-body">
+                                        <h5 class="card-title">${product.domainProductName}</h5>
+                                        <p class="card-text">${product.domainProductDescription}</p>
+                                        <a href="detalleProducto.html?productId=${product.domainProductId}" class="btn btn-primary">Ver Detalles</a>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        productContainer.append(productCard);
+                    });
+                },
+                error: function(err) {
+                    alert("Error al cargar los productos");
+                    console.error(err);
+                }
+            });
+        }
+    </script>
 </body>
 </html>

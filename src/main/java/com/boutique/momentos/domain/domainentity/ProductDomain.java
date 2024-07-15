@@ -8,7 +8,8 @@ public class ProductDomain {
     private int domainProductStock;
     private int domainProductCategoryId;
     private int domainProductUserId;
-    private byte[] domainProductImageData;
+    private String domainProductImagePath;
+    private char domainProductSize;
     private boolean domainProductStatus;
 
     public int getDomainProductId() {
@@ -53,11 +54,17 @@ public class ProductDomain {
     public void setDomainProductUserId(int domainProductUserId) {
         this.domainProductUserId = domainProductUserId;
     }
-    public byte[] getDomainProductImageData() {
-        return domainProductImageData;
+    public String getDomainProductImagePath() {
+        return domainProductImagePath;
     }
-    public void setDomainProductImageData(byte[] domainProductImageData) {
-        this.domainProductImageData = domainProductImageData;
+    public void setDomainProductImagePath(String domainProductImagePath) {
+        this.domainProductImagePath = domainProductImagePath;
+    }
+    public char getDomainProductSize() {
+        return domainProductSize;
+    }
+    public void setDomainProductSize(char domainProductSize) {
+        this.domainProductSize = domainProductSize;
     }
     public boolean isDomainProductStatus() {
         return domainProductStatus;
