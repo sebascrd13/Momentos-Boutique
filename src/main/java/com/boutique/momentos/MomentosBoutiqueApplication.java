@@ -7,7 +7,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class MomentosBoutiqueApplication {
 
 	public static void main(String[] args) {
-		//Aquí se inicializa la app
 		SpringApplication.run(MomentosBoutiqueApplication.class, args);
 	}
 }

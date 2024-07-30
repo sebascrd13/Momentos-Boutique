@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.*;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "usuarios")
@@ -23,6 +24,21 @@ public class User {
 
     @Column(name = "contrasena")
     private String password;
+
+    @Column(name = "email")
+    private String email;
+
+    @Column(name = "direccion")
+    private String direccion;
+
+    @Column(name = "ciudad")
+    private String ciudad;
+
+    @Column(name = "telefono")
+    private String telefono;
+
+    @Column(name = "fecharegistro")
+    private LocalDate fechaRegistro;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_rol")
@@ -66,5 +82,45 @@ public class User {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
+    }
+
+    public String getCiudad() {
+        return ciudad;
+    }
+
+    public void setCiudad(String ciudad) {
+        this.ciudad = ciudad;
+    }
+
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
+    public LocalDate getFechaRegistro() {
+        return fechaRegistro;
+    }
+
+    public void setFechaRegistro(LocalDate fechaRegistro) {
+        this.fechaRegistro = fechaRegistro;
     }
 }

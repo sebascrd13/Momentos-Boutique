@@ -5,4 +5,5 @@ import org.springframework.data.repository.CrudRepository;
 import com.boutique.momentos.persistence.entity.Role;
 
 public interface RoleDataRepository extends CrudRepository<Role, Integer> {
+    Role findByName(String name);
 }

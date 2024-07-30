@@ -29,7 +29,7 @@ public class SecurityDatabaseInitializer {
                 roleRepository.save(adminRole);
 
                 Role userRole = new Role();
-                userRole.setName("Usuario Normal");
+                userRole.setName("Cliente");
                 roleRepository.save(userRole);
 
                 User admin = new User();

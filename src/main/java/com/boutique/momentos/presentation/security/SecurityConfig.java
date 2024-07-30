@@ -19,6 +19,7 @@ import com.boutique.momentos.service.CustomUserDetailsService;
 @EnableWebSecurity
 public class SecurityConfig {
 
+    @Autowired
     private final CustomUserDetailsService userDetailsService;
 
     public SecurityConfig(CustomUserDetailsService userDetailsService) {
@@ -40,17 +41,19 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(requests -> requests
+                .requestMatchers("/", "/login.html", "/register.html", "/register").permitAll()
                 .requestMatchers("/admin/**").hasAuthority("Administrador")
-                .requestMatchers("/user/**").hasAuthority("Usuario Normal")
-                .requestMatchers("/", "/home", "/index.html", "/css/**", "/js/**").permitAll()
-                .requestMatchers(HttpMethod.POST, "/api/products/upload").permitAll()
+                .requestMatchers("/user/**").hasAuthority("Cliente")
                 .anyRequest().authenticated()
             )
             .formLogin(login -> login
+                .loginPage("/login.html")
+                .loginProcessingUrl("/login")
                 .defaultSuccessUrl("/index.html", true)
                 .permitAll())
             .logout(logout -> logout
-                .logoutSuccessUrl("/login")
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/login.html")
                 .permitAll())
             .csrf().disable();
 
