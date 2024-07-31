@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Cliente - Momentos Boutique</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            min-height: 100vh;
+            padding-bottom: 100px; /* Añadido para espacio en la parte inferior */
+        }
+        .container {
+            margin-top: 20px;
+            margin-bottom: 100px; /* Ajustado para más espacio */
+            flex: 1;
+        }
+        .btn-primary {
+            margin-top: 4px;
+            background-color: #fbc2eb;
+            border-color: #fbc2eb;
+            color: #000;
+            font-weight: bold;
+            text-transform: uppercase;
+            transition: background-color 0.3s ease;
+        }
+        .btn-primary:hover {
+            background-color: #ff89c0;
+            border-color: #ff89c0;
+            color: #fff;
+        }
+        .btn-primary:focus {
+            box-shadow: none;
+        }
+        .footer {
+            background-color: #000000dc;
+            color: #fff;
+            text-align: center;
+            padding: 20px 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="index.html">
+            <img src="img/Logo.jpg" alt="Logo de Momentos Boutique" style="width: 100px; height: 70px;">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html">Inicio</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="adminClientes.html">Atrás</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="contacto.html">Contacto</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-5">
+    <h2 class="mb-4">Editar Cliente</h2>
+    
+    <!-- Formulario para editar el cliente -->
+    <form id="editClientForm">
+        <div class="mb-3">
+            <label for="clientName" class="form-label">Nombre</label>
+            <input type="text" class="form-control" id="clientName" name="clientName" required>
+        </div>
+        <div class="mb-3">
+            <label for="clientDireccion" class="form-label">Dirección</label>
+            <input type="text" class="form-control" id="clientDireccion" name="clientDireccion" required>
+        </div>
+        <div class="mb-3">
+            <label for="clientCiudad" class="form-label">Ciudad</label>
+            <input type="text" class="form-control" id="clientCiudad" name="clientCiudad" required>
+        </div>
+        <div class="mb-3">
+            <label for="clientTelefono" class="form-label">Teléfono</label>
+            <input type="text" class="form-control" id="clientTelefono" name="clientTelefono" required>
+        </div>
+        <div class="mb-3">
+            <label for="clientEmail" class="form-label">Email</label>
+            <input type="email" class="form-control" id="clientEmail" name="clientEmail" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+    </form>
+</div>
+
+<footer class="footer">
+    <div class="container">
+        <p>&copy; 2024 Momentos Boutique. Todos los derechos reservados.</p>
+    </div>
+</footer>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.0-alpha1/js/bootstrap.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const id = urlParams.get('id');
+
+        if (id && !isNaN(id)) {
+            loadClientData(id);
+        } else {
+            alert("ID del cliente no válido");
+            window.location.href = "adminClientes.html";
+        }
+
+        $('#editClientForm').on('submit', function(event) {
+            event.preventDefault();
+            if (id && !isNaN(id)) {
+                updateClientData(id);
+            } else {
+                alert("ID del cliente no válido");
+            }
+        });
+    });
+
+    function loadClientData(id) {
+        $.ajax({
+            type: "GET",
+            url: `/api/clientes/${id}`,
+            success: function(client) {
+                $('#clientName').val(client.name);
+                $('#clientDireccion').val(client.direccion);
+                $('#clientCiudad').val(client.ciudad);
+                $('#clientTelefono').val(client.telefono);
+                $('#clientEmail').val(client.email);
+            },
+            error: function(err) {
+                alert("Error al cargar los datos del cliente");
+                console.error(err);
+            }
+        });
+    }
+
+    function updateClientData(id) {
+        var formData = {
+            name: $('#clientName').val(),
+            direccion: $('#clientDireccion').val(),
+            ciudad: $('#clientCiudad').val(),
+            telefono: $('#clientTelefono').val(),
+            email: $('#clientEmail').val()
+        };
+
+        $.ajax({
+            type: "PUT",
+            url: `/api/clientes/${id}`,
+            data: JSON.stringify(formData),
+            contentType: "application/json",
+            success: function(response) {
+                alert("Cliente actualizado exitosamente");
+                window.location.href = "adminClientes.html";
+            },
+            error: function(err) {
+                alert("Error al actualizar el cliente");
+                console.error(err);
+            }
+        });
+    }
+</script>
+
+</body>
+</html>

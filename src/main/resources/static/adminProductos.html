@@ -129,6 +129,9 @@
                                                 <div class="btn-group" role="group" aria-label="Acciones">
                                                     <a href="editarProducto.html?productId=${product.domainProductId}" class="btn btn-primary mx-1 rounded-2">Editar</a>
                                                     <button type="button" class="btn btn-danger mx-1 rounded-2" onclick="deleteProduct(${product.domainProductId})">Eliminar</button>
+                                                    <button type="button" class="btn ${product.isFeatured ? 'btn-warning' : 'btn-secondary'} mx-1 rounded-2" onclick="toggleFeatured(${product.domainProductId}, this)">
+                                                        ${product.isFeatured ? 'Destacado' : 'No Destacado'}
+                                                    </button>
                                                 </div>
                                             </div>
                                         </div>
@@ -165,6 +168,39 @@
                 });
             }
         }
+
+        function toggleFeatured(productId, button) {
+            // Determina el estado actual
+            const isFeatured = button.classList.contains('btn-warning');
+            
+            // Alterna el estado
+            const newFeaturedStatus = !isFeatured;
+            
+            // Cambia el estilo del botón
+            button.classList.toggle('btn-warning', newFeaturedStatus);
+            button.classList.toggle('btn-secondary', !newFeaturedStatus);
+            button.textContent = newFeaturedStatus ? 'Destacado' : 'No Destacado';
+            
+            // Envía la solicitud al servidor para actualizar el estado del producto
+            $.ajax({
+                type: "PATCH",
+                url: `http://localhost:8090/api/products/${productId}/featured`,
+                data: JSON.stringify({ isFeatured: newFeaturedStatus }),
+                contentType: "application/json",
+                success: function(response) {
+                    alert("Estado de destacado actualizado correctamente");
+                },
+                error: function(err) {
+                    alert("Error al actualizar el estado de destacado");
+                    console.error(err);
+                    // Revertir el cambio si hubo un error
+                    button.classList.toggle('btn-warning', isFeatured);
+                    button.classList.toggle('btn-secondary', !isFeatured);
+                    button.textContent = isFeatured ? 'Destacado' : 'No Destacado';
+                }
+            });
+        }
     </script>
+
 </body>
 </html>

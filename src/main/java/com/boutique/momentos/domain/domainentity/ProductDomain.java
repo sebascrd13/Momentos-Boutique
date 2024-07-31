@@ -10,7 +10,7 @@ public class ProductDomain {
     private int domainProductUserId;
     private String domainProductImagePath;
     private char domainProductSize;
-    private boolean domainProductStatus;
+    private String domainProductStatus;
 
     public int getDomainProductId() {
         return domainProductId;
@@ -66,10 +66,10 @@ public class ProductDomain {
     public void setDomainProductSize(char domainProductSize) {
         this.domainProductSize = domainProductSize;
     }
-    public boolean isDomainProductStatus() {
+    public String getDomainProductStatus() {
         return domainProductStatus;
     }
-    public void setDomainProductStatus(boolean domainProductStatus) {
+    public void setDomainProductStatus(String domainProductStatus) {
         this.domainProductStatus = domainProductStatus;
     }
 }

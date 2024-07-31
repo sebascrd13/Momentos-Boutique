@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import com.boutique.momentos.service.ClientService;
 import com.boutique.momentos.service.CustomUserDetailsService;
 
 @Configuration
@@ -21,9 +22,13 @@ public class SecurityConfig {
 
     @Autowired
     private final CustomUserDetailsService userDetailsService;
+    
+    @Autowired
+    private final ClientService clientService;
 
-    public SecurityConfig(CustomUserDetailsService userDetailsService) {
+    public SecurityConfig(CustomUserDetailsService userDetailsService, ClientService clientService) {
         this.userDetailsService = userDetailsService;
+        this.clientService = clientService;
     }
 
     @Autowired
@@ -49,7 +54,7 @@ public class SecurityConfig {
             .formLogin(login -> login
                 .loginPage("/login.html")
                 .loginProcessingUrl("/login")
-                .defaultSuccessUrl("/index.html", true)
+                .successHandler(customAuthenticationSuccessHandler())
                 .permitAll())
             .logout(logout -> logout
                 .logoutUrl("/logout")
@@ -58,5 +63,10 @@ public class SecurityConfig {
             .csrf().disable();
 
         return http.build();
+    }
+
+    @Bean
+    public CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler() {
+        return new CustomAuthenticationSuccessHandler(clientService);
     }
 }

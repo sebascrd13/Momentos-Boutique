@@ -3,12 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Productos - Momentos Boutique</title>
+    <title>Administración de Clientes - Momentos Boutique</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
         body {
             font-family: Arial, sans-serif;
         }
@@ -29,186 +26,118 @@
         .btn-primary:focus {
             box-shadow: none;
         }
-        /* Añade espacio entre los botones de editar y eliminar */
         .btn-group > .btn {
             margin-right: 10px;
         }
-        .card-imgimg {
-          width: 179px;
-          height: 193px;
+        .card-img {
+            width: 100%;
+            height: auto;
         }
-        
+        .card-body {
+            padding: 1.25rem;
+        }
     </style>
 </head>
 <body>
 
-  
-      <!-- Barra de navegación -->
-      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-          <div class="container">
+    <!-- Barra de navegación -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
             <a class="navbar-brand" href="index.html">
-              <img src="img/Logo.jpg" alt="Logo de Momentos Boutique" style="width: 100px; height: 70px;">
-          </a>
-              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                  <span class="navbar-toggler-icon"></span>
-              </button>
-              <div class="collapse navbar-collapse" id="navbarNav">
-                  <ul class="navbar-nav ms-auto">
-                      <li class="nav-item">
-                          <a class="nav-link" href="index.html">Inicio</a>
-                      </li>
-                      <li class="nav-item">
-                          <a class="nav-link" aria-current="page" href="admin.html">Atras</a>
-                      </li>
-                      <li class="nav-item">
-                          <a class="nav-link active" aria-current="page" href="adminClientes.html">Administración de Clientes</a>
-                      </li>
-                      <li class="nav-item">
+                <img src="img/Logo.jpg" alt="Logo de Momentos Boutique" style="width: 100px; height: 70px;">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="admin.html">Atras</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="adminClientes.html">Administración de Clientes</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="contacto.html">Contacto</a>
                     </li>
-                  </ul>
-              </div>
-          </div>
-      </nav>
-  
-      <!-- Contenido principal -->
-      <div class="container mt-5">
-        <h2 class="mb-4">Administración de Clientes</h2>
-          <div class="row">
-              <div class="col-md-6">
-                  <div class="card mb-3">
-                      <div class="row no-gutters">
-                          <div class="col-md-4">
-                              <img src="img/hombre.png" class="card-img" alt="Producto 2">
-                          </div>
-                          <div class="col-md-8">
-                              <div class="card-body">
-                                  <h5 class="card-title">nombre: cliente</h5>
-                                  <p class="card-text">lugar:- </p>
-                                  <p class="card-text">compra: 10 </p>
-                                  <div class="btn-group" role="group" aria-label="Acciones">
-                                      <button type="button" class="btn btn-primary mr-2 rounded-2">Editar</button>
-                                      <button type="button" class="btn btn-danger rounded-2">Eliminar</button>
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
-                  </div>
-              </div>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
-              <div class="col-md-6">
-                <div class="card mb-3">
-                    <div class="row no-gutters">
-                        <div class="col-md-4">
-                            <img src="img/hombre.png" class="card-img" alt="Producto 2">
-                        </div>
-                        <div class="col-md-8">
-                            <div class="card-body">
-                                <h5 class="card-title">nombre: cliente</h5>
-                                <p class="card-text">lugar:- </p>
-                                <p class="card-text">compra: 10 </p>
-                                <div class="btn-group" role="group" aria-label="Acciones">
-                                    <button type="button" class="btn btn-primary mr-2 rounded-2">Editar</button>
-                                    <button type="button" class="btn btn-danger rounded-2">Eliminar</button>
+    <!-- Contenido principal -->
+    <div class="container mt-5">
+        <h2 class="mb-4">Administración de Clientes</h2>
+        <div class="row" id="clientes-container">
+            <!-- Las tarjetas de clientes se insertarán aquí mediante JavaScript -->
+        </div>
+    </div>
+
+    <footer class="bg-dark text-light text-center py-3">
+        <p>&copy; 2024 Momentos Boutique. Todos los derechos reservados.</p>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+    <script>
+        // Función para cargar clientes desde la API y generar las tarjetas
+        async function loadClients() {
+            try {
+                const response = await fetch('/api/clientes');
+                const clients = await response.json();
+                const container = document.getElementById('clientes-container');
+                container.innerHTML = '';
+
+                clients.forEach(client => {
+                    const card = `
+                        <div class="col-md-6 mb-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Nombre: ${client.name}</h5>
+                                    <p class="card-text">Dirección: ${client.direccion}</p>
+                                    <p class="card-text">Ciudad: ${client.ciudad}</p>
+                                    <p class="card-text">Teléfono: ${client.telefono}</p>
+                                    <p class="card-text">Email: ${client.email}</p>
+                                    <p class="card-text">Rol: ${client.role.name}</p> <!-- Mostrar el rol aquí -->
+                                    <div class="btn-group" role="group" aria-label="Acciones">
+                                        <a href="editarCliente.html?id=${client.idUser}" class="btn btn-primary">Editar</a>
+                                        <button type="button" class="btn btn-danger" onclick="deleteClient(${client.idUser})">Eliminar</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
+                    `;
+                    container.innerHTML += card;
+                });
+            } catch (error) {
+                console.error('Error loading clients:', error);
+            }
+        }
 
-            <div class="col-md-6">
-              <div class="card mb-3">
-                  <div class="row no-gutters">
-                      <div class="col-md-4">
-                          <img src="img/hombre.png" class="card-img" alt="Producto 2">
-                      </div>
-                      <div class="col-md-8">
-                          <div class="card-body">
-                              <h5 class="card-title">nombre: cliente</h5>
-                              <p class="card-text">lugar:- </p>
-                              <p class="card-text">compra: 10 </p>
-                              <div class="btn-group" role="group" aria-label="Acciones">
-                                  <button type="button" class="btn btn-primary mr-2 rounded-2">Editar</button>
-                                  <button type="button" class="btn btn-danger rounded-2">Eliminar</button>
-                              </div>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-          </div>
-          <div class="col-md-6">
-            <div class="card mb-3">
-                <div class="row no-gutters">
-                    <div class="col-md-4">
-                        <img src="img/hombre.png" class="card-img" alt="Producto 2">
-                    </div>
-                    <div class="col-md-8">
-                        <div class="card-body">
-                            <h5 class="card-title">nombre: cliente</h5>
-                            <p class="card-text">lugar:- </p>
-                            <p class="card-text">compra: 10 </p>
-                            <div class="btn-group" role="group" aria-label="Acciones">
-                                <button type="button" class="btn btn-primary mr-2 rounded-2">Editar</button>
-                                <button type="button" class="btn btn-danger rounded-2">Eliminar</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6">
-          <div class="card mb-3">
-              <div class="row no-gutters">
-                  <div class="col-md-4">
-                      <img src="img/hombre.png" class="card-img" alt="Producto 2">
-                  </div>
-                  <div class="col-md-8">
-                      <div class="card-body">
-                          <h5 class="card-title">nombre: cliente</h5>
-                          <p class="card-text">lugar:- </p>
-                          <p class="card-text">compra: 10 </p>
-                          <div class="btn-group" role="group" aria-label="Acciones">
-                              <button type="button" class="btn btn-primary mr-2 rounded-2">Editar</button>
-                              <button type="button" class="btn btn-danger rounded-2">Eliminar</button>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-          </div>
-      </div>
-      <div class="col-md-6">
-        <div class="card mb-3">
-            <div class="row no-gutters">
-                <div class="col-md-4">
-                    <img src="img/hombre.png" class="card-imgimg" alt="Producto 2">
-                </div>
-                <div class="col-md-8">
-                    <div class="card-body">
-                        <h5 class="card-title">nombre: cliente</h5>
-                        <p class="card-text">lugar:- </p>
-                        <p class="card-text">compra: 10 </p>
-                        <div class="btn-group" role="group" aria-label="Acciones">
-                            <button type="button" class="btn btn-primary mr-2 rounded-2">Editar</button>
-                            <button type="button" class="btn btn-danger rounded-2">Eliminar</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-  
-              <!-- Añadir más tarjetas aquí -->
-  
-          </div>
-      </div>
-      
-      <footer class="bg-dark text-light text-center py-3">
-          <p>&copy; 2024 Momentos Boutique. Todos los derechos reservados.</p>
-      </footer>
-  
-      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-      <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+        // Función para eliminar un cliente
+        async function deleteClient(id) {
+            try {
+                const response = await fetch(`/api/clientes/delete/${id}`, {
+                    method: 'DELETE'
+                });
+
+                if (response.ok) {
+                    alert('Cliente eliminado con éxito');
+                    loadClients(); // Recargar la lista de clientes
+                } else {
+                    alert('Error al eliminar el cliente');
+                }
+            } catch (error) {
+                console.error('Error deleting client:', error);
+            }
+        }
+
+        // Cargar clientes cuando la página se ha cargado
+        document.addEventListener('DOMContentLoaded', loadClients);
+    </script>
 </body>
 </html>

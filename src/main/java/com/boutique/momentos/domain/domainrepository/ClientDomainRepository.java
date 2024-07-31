@@ -3,14 +3,13 @@ package com.boutique.momentos.domain.domainrepository;
 import java.util.List;
 import java.util.Optional;
 
-import com.boutique.momentos.domain.domainentity.ProductDomain;
 import com.boutique.momentos.persistence.entity.User;
 
 public interface ClientDomainRepository {
     List<User> getAllClients();
-    ProductDomain saveProduct(ProductDomain product);
+    User saveClient(User user);
     Optional<User> getClientById(int clientId);
-    void updateClient(ProductDomain product);
-    void deleteProduct(int productId);
-    
+    User getClientByUsername(String username);
+    void updateClient(User user);
+    void deleteClient(int clientId);
 }
