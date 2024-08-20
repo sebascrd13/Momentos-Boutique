@@ -45,22 +45,6 @@ public class OrderRepository implements OrderDomainRepository {
     }
 
     @Override
-    public String getOrderStatus(int orderId, int userId) {
-        return orderDataRepository.findById(orderId)
-            .filter(order -> order.getOrderUserId() == userId)
-            .map(order -> order.isOrderStatus() ? "Completado" : "Pendiente")
-            .orElseThrow(() -> new IllegalArgumentException("Pedido no encontrado para el usuario con el id: " + userId));
-    }
-
-    @Override
-    public void updateOrderStatus(int orderId, String newStatus) {
-        Order order = orderDataRepository.findById(orderId)
-            .orElseThrow(() -> new IllegalArgumentException("Pedido no encontrado con el id: " + orderId));
-        order.setOrderStatus("Completado".equalsIgnoreCase(newStatus));
-        orderDataRepository.save(order);
-    }
-
-    @Override
     public void deleteOrder(int domainOrderId) {
         orderDataRepository.deleteById(domainOrderId);
     }

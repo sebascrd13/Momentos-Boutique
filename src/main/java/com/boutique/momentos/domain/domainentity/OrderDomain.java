@@ -2,12 +2,11 @@ package com.boutique.momentos.domain.domainentity;
 
 public class OrderDomain {
     private int domainOrderId;
-    private String domainOrderPaymentMethod;
     private String domainOrderLocation;
-    private float domainOrderCost;
     private int domainOrderProductId;
     private int domainOrderUserId;
-    private boolean domainOrderStatus;
+    private String domainOrderStatus;
+    private int domainOrderPaymentId;
 
     public int getDomainOrderId() {
         return domainOrderId;
@@ -15,23 +14,11 @@ public class OrderDomain {
     public void setDomainOrderId(int domainOrderId) {
         this.domainOrderId = domainOrderId;
     }
-    public String getDomainOrderPaymentMethod() {
-        return domainOrderPaymentMethod;
-    }
-    public void setDomainOrderPaymentMethod(String domainOrderPaymentMethod) {
-        this.domainOrderPaymentMethod = domainOrderPaymentMethod;
-    }
     public String getDomainOrderLocation() {
         return domainOrderLocation;
     }
     public void setDomainOrderLocation(String domainOrderLocation) {
         this.domainOrderLocation = domainOrderLocation;
-    }
-    public float getDomainOrderCost() {
-        return domainOrderCost;
-    }
-    public void setDomainOrderCost(float domainOrderCost) {
-        this.domainOrderCost = domainOrderCost;
     }
     public int getDomainOrderProductId() {
         return domainOrderProductId;
@@ -45,10 +32,16 @@ public class OrderDomain {
     public void setDomainOrderUserId(int domainOrderUserId) {
         this.domainOrderUserId = domainOrderUserId;
     }
-    public boolean isDomainOrderStatus() {
+    public String getDomainOrderStatus() {
         return domainOrderStatus;
     }
-    public void setDomainOrderStatus(boolean domainOrderStatus) {
+    public void setDomainOrderStatus(String domainOrderStatus) {
         this.domainOrderStatus = domainOrderStatus;
+    }
+    public int getDomainOrderPaymentId() {
+        return domainOrderPaymentId;
+    }
+    public void setDomainOrderPaymentId(int domainOrderPaymentId) {
+        this.domainOrderPaymentId = domainOrderPaymentId;
     }
 }

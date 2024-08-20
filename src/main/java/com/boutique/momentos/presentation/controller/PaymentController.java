@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import java.security.Principal;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.boutique.momentos.domain.domainentity.PaymentDomain;
+import com.boutique.momentos.persistence.entity.User;
+import com.boutique.momentos.service.ClientService;
 import com.boutique.momentos.service.PaymentService;
 
 @RestController
@@ -19,6 +23,9 @@ public class PaymentController {
 
     @Autowired
     private PaymentService paymentService;
+
+    @Autowired
+    private ClientService clientService;
 
     @GetMapping
     public ResponseEntity<List<PaymentDomain>> getAllPayments() {
@@ -41,18 +48,23 @@ public class PaymentController {
     }
 
     @PostMapping("/upload")
-    public ResponseEntity<PaymentDomain> savePayment(@RequestParam("userId") int userId,
-                                                    @RequestParam("image") MultipartFile imageFile) {
+    public ResponseEntity<PaymentDomain> savePayment(@RequestParam("image") MultipartFile imageFile,
+                                                    @RequestParam("paymentMethod") String paymentMethod,
+                                                    Principal principal) {
         if (imageFile.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         try {
+            String username = principal.getName();
+            User user = clientService.getClientByUsername(username);
             byte[] imageData = imageFile.getBytes();
             PaymentDomain payment = new PaymentDomain();
-            payment.setDomainIdUser(userId);
+            payment.setDomainIdUser(user.getIdUser());
             payment.setDomainImageData(imageData);
             LocalDateTime paymentDate = LocalDateTime.now();
             payment.setDomainPaymentDate(paymentDate);
+            payment.setDomainPaymentStatus(false);
+            payment.setDomainPaymentMethod(paymentMethod);
             PaymentDomain savedPayment = paymentService.savePayment(payment);
             return new ResponseEntity<>(savedPayment, HttpStatus.CREATED);
         } catch (Exception e) {

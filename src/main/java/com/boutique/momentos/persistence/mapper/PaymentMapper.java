@@ -18,6 +18,8 @@ public interface PaymentMapper {
         @Mapping(source = "imageData", target = "domainImageData"),
         @Mapping(source = "paymentDate", target = "domainPaymentDate"),
         @Mapping(source = "paymentStatus", target = "domainPaymentStatus"),
+        @Mapping(source = "paymentMethod", target = "domainPaymentMethod"),
+        @Mapping(source = "paymentTotalCost", target = "domainPaymentTotalCost"),
     })
 
     PaymentDomain toPayment (Payment payment);

@@ -46,7 +46,7 @@ public class Product {
     private char productSize;
 
     @Column(name = "status")
-    private boolean productStatus;
+    private String productStatus;
 
     @OneToMany(mappedBy = "product")
     private List<OrderProduct> orderProducts = new ArrayList<>();
@@ -123,13 +123,14 @@ public class Product {
         this.productImagePath = productImagePath;
     }
 
-    public boolean isProductStatus() {
+    public String getProductStatus() {
         return productStatus;
     }
 
-    public void setProductStatus(boolean productStatus) {
+    public void setProductStatus(String productStatus) {
         this.productStatus = productStatus;
     }
+
     public Category getCategory() {
         return category;
     }

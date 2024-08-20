@@ -95,7 +95,7 @@
         $(document).ready(function() {
             loadProducts();
         });
-    
+
         function loadProducts() {
             $.ajax({
                 type: "GET",
@@ -129,8 +129,8 @@
                                                 <div class="btn-group" role="group" aria-label="Acciones">
                                                     <a href="editarProducto.html?productId=${product.domainProductId}" class="btn btn-primary mx-1 rounded-2">Editar</a>
                                                     <button type="button" class="btn btn-danger mx-1 rounded-2" onclick="deleteProduct(${product.domainProductId})">Eliminar</button>
-                                                    <button type="button" class="btn ${product.isFeatured ? 'btn-warning' : 'btn-secondary'} mx-1 rounded-2" onclick="toggleFeatured(${product.domainProductId}, this)">
-                                                        ${product.isFeatured ? 'Destacado' : 'No Destacado'}
+                                                    <button type="button" class="btn ${product.domainProductStatus === 'Destacado' ? 'btn-warning' : 'btn-secondary'} mx-1 rounded-2" onclick="toggleFeatured(${product.domainProductId}, this)">
+                                                        ${product.domainProductStatus === 'Destacado' ? 'Destacado' : 'No Destacado'}
                                                     </button>
                                                 </div>
                                             </div>
@@ -151,12 +151,12 @@
                 }
             });
         }
-    
+
         function deleteProduct(productId) {
             if (confirm("¿Estás seguro de que deseas eliminar este producto?")) {
                 $.ajax({
                     type: "DELETE",
-                    url: `http://localhost:8090/api/products/${productId}`,
+                    url: `http://localhost:8090/api/products/delete/${productId}`,
                     success: function(response) {
                         alert("Producto eliminado correctamente");
                         location.reload();
@@ -176,16 +176,22 @@
             // Alterna el estado
             const newFeaturedStatus = !isFeatured;
             
+            // Define el nuevo estado como un string
+            const statusString = newFeaturedStatus ? 'Destacado' : 'No Destacado';
+            
             // Cambia el estilo del botón
             button.classList.toggle('btn-warning', newFeaturedStatus);
             button.classList.toggle('btn-secondary', !newFeaturedStatus);
-            button.textContent = newFeaturedStatus ? 'Destacado' : 'No Destacado';
-            
+            button.textContent = statusString;
+
+            // Desactiva el botón para evitar múltiples clics
+            button.disabled = true;
+
             // Envía la solicitud al servidor para actualizar el estado del producto
             $.ajax({
                 type: "PATCH",
-                url: `http://localhost:8090/api/products/${productId}/featured`,
-                data: JSON.stringify({ isFeatured: newFeaturedStatus }),
+                url: `http://localhost:8090/api/products/${productId}/status`,
+                data: JSON.stringify({ status: statusString }),
                 contentType: "application/json",
                 success: function(response) {
                     alert("Estado de destacado actualizado correctamente");
@@ -197,6 +203,10 @@
                     button.classList.toggle('btn-warning', isFeatured);
                     button.classList.toggle('btn-secondary', !isFeatured);
                     button.textContent = isFeatured ? 'Destacado' : 'No Destacado';
+                },
+                complete: function() {
+                    // Reactiva el botón después de completar la solicitud
+                    button.disabled = false;
                 }
             });
         }

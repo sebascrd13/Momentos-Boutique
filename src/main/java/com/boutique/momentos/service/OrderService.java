@@ -25,17 +25,6 @@ public class OrderService {
     public OrderDomain createOrder(OrderDomain domainOrder){
         return orderDomainRepository.createOrder(domainOrder);
     }
-    public String getOrderStatus(int domainOrderId, int domainUserId){
-        return orderDomainRepository.getOrderStatus(domainOrderId, domainUserId);
-    }
-    public boolean updateOrderStatus(int domainOrderId, String newStatus){
-        if (orderDomainRepository.getOrderById(domainOrderId).isPresent()) {
-            orderDomainRepository.updateOrderStatus(domainOrderId, newStatus);
-            return true;
-        } else {
-            return false;
-        }
-    }
     public boolean deleteOrder(int domainOrderId){
         if (getOrderById(domainOrderId).isPresent()){
             orderDomainRepository.deleteOrder(domainOrderId);

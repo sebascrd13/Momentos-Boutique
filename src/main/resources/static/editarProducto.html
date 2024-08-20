@@ -9,11 +9,11 @@
         body {
             background-color: #f8f9fa;
             min-height: 100vh;
-            padding-bottom: 100px; /* Añadido para espacio en la parte inferior */
+            padding-bottom: 100px;
         }
         .container {
             margin-top: 20px;
-            margin-bottom: 100px; /* Ajustado para más espacio */
+            margin-bottom: 100px;
             flex: 1;
         }
         .btn-primary {
@@ -40,6 +40,9 @@
             padding: 20px 0;
             width: 100%;
         }
+        .nav-item .btn-secondary {
+            margin-left: 10px;
+        }
     </style>
 </head>
 <body>
@@ -62,6 +65,9 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="contacto.html">Contacto</a>
+                </li>
+                <li class="nav-item">
+                    <a class="btn btn-secondary logout-btn" href="/logout">Cerrar sesión</a>
                 </li>
             </ul>
         </div>
@@ -125,7 +131,7 @@
     $(document).ready(function() {
         const urlParams = new URLSearchParams(window.location.search);
         const productId = urlParams.get('productId');
-        const userId = 1; // Ejemplo: Puedes ajustar esto para obtener el userId adecuado
+        const userId = 1;
 
         if (productId) {
             loadProductData(productId);
@@ -172,7 +178,6 @@
                 $('#productSize').val(product.domainProductSize);
 
                 loadCurrentCategory(product.domainProductCategoryId);
-                loadProductSizes(product.domainProductSize);
 
                 $('#categoryId').val(product.domainProductCategoryId);
             },
@@ -196,21 +201,13 @@
         });
     }
 
-    function loadProductSizes(sizes) {
-        if (sizes) {
-            $('#productSize').val(sizes);
-        } else {
-            $('#productSize').val(''); 
-        }
-    }
-
     function updateProductData(productId, userId) {
         var formData = new FormData($('#editProductForm')[0]);
-        formData.append('userId', userId); // Agregar userId al formData
+        formData.append('userId', userId);
 
         var imageFile = $('#productImage')[0].files[0];
         if (imageFile) {
-            formData.append('imageFile', imageFile); // Agregar la nueva imagen al formData si está presente
+            formData.append('imageFile', imageFile);
         }
 
         $.ajax({

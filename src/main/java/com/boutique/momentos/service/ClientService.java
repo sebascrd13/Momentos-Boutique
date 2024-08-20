@@ -6,9 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.boutique.momentos.domain.domainentity.ProductDomain;
 import com.boutique.momentos.domain.domainrepository.ClientDomainRepository;
-import com.boutique.momentos.domain.domainrepository.ProductDomainRepository;
 import com.boutique.momentos.persistence.entity.User;
 
 @Service

@@ -18,12 +18,12 @@ public class OrderProduct {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("orderId")
-    @JoinColumn(name = "pedido_id")
+    @JoinColumn(name = "id_pedido")
     private Order order;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("productId")
-    @JoinColumn(name = "producto_id")
+    @JoinColumn(name = "id_producto")
     private Product product;
 
     @Column(name = "cantidad")

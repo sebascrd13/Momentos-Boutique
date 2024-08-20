@@ -24,8 +24,12 @@ public class Payment {
     private byte[] imageData;
     @Column(name = "fecha")
     private LocalDateTime paymentDate;
-    @Column(name = "status")
+    @Column(name = "estado")
     private boolean paymentStatus;
+    @Column(name = "metodo_pago")
+    private String paymentMethod;
+    @Column(name = "costo_total_pago")
+    private int paymentTotalCost;
 
     @OneToOne
     @JoinColumn(name = "id_usuario", insertable = false, updatable = false)
@@ -77,5 +81,13 @@ public class Payment {
 
     public void setPaymentStatus(boolean paymentStatus) {
         this.paymentStatus = paymentStatus;
+    }
+
+    public String getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public void setPaymentMethod(String paymentMethod) {
+        this.paymentMethod = paymentMethod;
     }
 }

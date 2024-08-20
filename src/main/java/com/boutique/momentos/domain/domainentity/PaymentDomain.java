@@ -8,6 +8,8 @@ public class PaymentDomain {
     private byte[] domainImageData;
     private LocalDateTime domainPaymentDate;
     private boolean domainPaymentStatus;
+    private String domainPaymentMethod;
+    private int domainPaymentTotalCost;
 
     public int getDomainIdPayment() {
         return domainIdPayment;
@@ -38,5 +40,17 @@ public class PaymentDomain {
     }
     public void setDomainPaymentDate(LocalDateTime domainPaymentDate) {
         this.domainPaymentDate = domainPaymentDate;
+    }
+    public String getDomainPaymentMethod() {
+        return domainPaymentMethod;
+    }
+    public void setDomainPaymentMethod(String domainPaymentMethod) {
+        this.domainPaymentMethod = domainPaymentMethod;
+    }
+    public int getDomainPaymentTotalCost() {
+        return domainPaymentTotalCost;
+    }
+    public void setDomainPaymentTotalCost(int domainPaymentTotalCost) {
+        this.domainPaymentTotalCost = domainPaymentTotalCost;
     }
 }

@@ -20,22 +20,20 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_pedido")
     private int orderId;
-    @Column(name = "metodopago")
-    private String orderPaymentMethod;
     @Column(name = "direccion")
     private String orderLocation;
-    @Column(name = "precio")
-    private float orderCost;
     @Column(name = "id_producto")
     private int orderProductId;
     @Column(name = "id_usuario")
     private int orderUserId;
-    @Column(name = "status")
-    private boolean orderStatus;
+    @Column(name = "estado")
+    private String orderStatus;
+    @Column(name = "id_pago")
+    private int orderPaymentId;
 
     @OneToMany(mappedBy = "order")
     private List<OrderProduct> orderProducts = new ArrayList<>();
-    
+
     @ManyToOne
     @JoinColumn(name = "id_usuario", insertable = false, updatable = false)
     private User user;
@@ -48,28 +46,12 @@ public class Order {
         this.orderId = orderId;
     }
 
-    public String getOrderPaymentMethod() {
-        return orderPaymentMethod;
-    }
-
-    public void setOrderPaymentMethod(String orderPaymentMethod) {
-        this.orderPaymentMethod = orderPaymentMethod;
-    }
-
     public String getOrderLocation() {
         return orderLocation;
     }
 
     public void setOrderLocation(String orderLocation) {
         this.orderLocation = orderLocation;
-    }
-
-    public float getOrderCost() {
-        return orderCost;
-    }
-
-    public void setOrderCost(float orderCost) {
-        this.orderCost = orderCost;
     }
 
     public int getOrderProductId() {
@@ -88,14 +70,6 @@ public class Order {
         this.orderUserId = orderUserId;
     }
 
-    public boolean isOrderStatus() {
-        return orderStatus;
-    }
-
-    public void setOrderStatus(boolean orderStatus) {
-        this.orderStatus = orderStatus;
-    }
-
     public User getUser() {
         return user;
     }
@@ -110,5 +84,21 @@ public class Order {
 
     public void setOrderProducts(List<OrderProduct> orderProducts) {
         this.orderProducts = orderProducts;
+    }
+
+    public String getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(String orderStatus) {
+        this.orderStatus = orderStatus;
+    }
+
+    public int getOrderPaymentId() {
+        return orderPaymentId;
+    }
+
+    public void setOrderPaymentId(int orderPaymentId) {
+        this.orderPaymentId = orderPaymentId;
     }
 }

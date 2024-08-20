@@ -10,7 +10,5 @@ public interface OrderDomainRepository {
     Optional<OrderDomain> getOrderById(int orderId);
     List<OrderDomain> getOrdersByUserId(int userId);
     OrderDomain createOrder(OrderDomain order);
-    String getOrderStatus(int orderId, int userId);
-    void updateOrderStatus(int orderId, String newStatus);
     void deleteOrder(int orderId);
 }

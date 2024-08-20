@@ -69,6 +69,7 @@ public class ProductController {
             productDomain.setDomainProductStock(productStock);
             productDomain.setDomainProductCategoryId(categoryId);
             productDomain.setDomainProductSize(productSize);
+            productDomain.setDomainProductStatus("No Destacado");
 
             ProductDomain savedProduct = productService.saveProduct(productDomain);
 
@@ -82,7 +83,7 @@ public class ProductController {
     @PutMapping("/{id}")
     public ResponseEntity<ProductDomain> updateProduct(@PathVariable("id") int id,
                                                        @RequestParam("userId") int userId,
-                                                       @RequestParam("imageFile") MultipartFile file,
+                                                       @RequestParam(value = "imageFile", required = false) MultipartFile file,
                                                        @RequestParam("productName") String productName,
                                                        @RequestParam("productDescription") String productDescription,
                                                        @RequestParam("productPrice") float productPrice,
@@ -90,30 +91,32 @@ public class ProductController {
                                                        @RequestParam("productStock") int productStock,
                                                        @RequestParam("categoryId") int categoryId) {
         try {
-            String imagePath = null;
-            if (!file.isEmpty()) {
+            ProductDomain existingProduct = productService.getProductById(id).orElse(null);
+            if (existingProduct == null) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+    
+            String imagePath = existingProduct.getDomainProductImagePath();
+    
+            if (file != null && !file.isEmpty()) {
                 byte[] bytes = file.getBytes();
                 String filename = file.getOriginalFilename();
                 Path path = Paths.get(UPLOADED_FOLDER + filename);
                 Files.write(path, bytes);
                 imagePath = "img/" + filename;
             }
-
-            ProductDomain productDomain = new ProductDomain();
-            productDomain.setDomainProductId(id);
-            productDomain.setDomainProductUserId(userId);
-            productDomain.setDomainProductName(productName);
-            productDomain.setDomainProductDescription(productDescription);
-            productDomain.setDomainProductPrice(productPrice);
-            productDomain.setDomainProductStock(productStock);
-            productDomain.setDomainProductSize(productSize);
-            if (imagePath != null) {
-                productDomain.setDomainProductImagePath(imagePath);
-            }
-            productDomain.setDomainProductCategoryId(categoryId);
-
-            ProductDomain updatedProduct = productService.updateProduct(productDomain);
-
+    
+            existingProduct.setDomainProductUserId(userId);
+            existingProduct.setDomainProductName(productName);
+            existingProduct.setDomainProductDescription(productDescription);
+            existingProduct.setDomainProductPrice(productPrice);
+            existingProduct.setDomainProductStock(productStock);
+            existingProduct.setDomainProductSize(productSize);
+            existingProduct.setDomainProductImagePath(imagePath);
+            existingProduct.setDomainProductCategoryId(categoryId);
+    
+            ProductDomain updatedProduct = productService.updateProduct(existingProduct);
+    
             return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
@@ -134,13 +137,14 @@ public class ProductController {
     }
 
     @PatchMapping("/{id}/status")
-    public ResponseEntity<ProductDomain> updateProductStatus(@PathVariable("id") int id, @RequestBody StatusUpdateRequest statusUpdateRequest) {
+    public ResponseEntity<ProductDomain> updateProductStatus(
+            @PathVariable("id") int id,
+            @RequestBody StatusUpdateRequest statusUpdateRequest) {
+        
         Optional<ProductDomain> productOpt = productService.getProductById(id);
         if (productOpt.isPresent()) {
             ProductDomain product = productOpt.get();
-            System.out.println(product.getDomainProductName());
             product.setDomainProductStatus(statusUpdateRequest.getStatus());
-            System.out.println(product.getDomainProductStatus());
             ProductDomain updatedProduct = productService.updateProduct(product);
             return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
         } else {

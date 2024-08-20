@@ -14,12 +14,11 @@ import com.boutique.momentos.persistence.entity.Order;
 public interface OrderMapper {
     @Mappings({
         @Mapping(source = "orderId", target = "domainOrderId"),
-        @Mapping(source = "orderPaymentMethod", target = "domainOrderPaymentMethod"),
         @Mapping(source = "orderLocation", target = "domainOrderLocation"),
-        @Mapping(source = "orderCost", target = "domainOrderCost"),
         @Mapping(source = "orderProductId", target = "domainOrderProductId"),
         @Mapping(source = "orderUserId", target = "domainOrderUserId"),
         @Mapping(source = "orderStatus", target = "domainOrderStatus"),
+        @Mapping(source = "orderPaymentId", target = "domainOrderPaymentId"),
     })
 
     OrderDomain toOrder (Order order);
