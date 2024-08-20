@@ -76,65 +76,12 @@
     <div class="container mt-5">
         <h2 class="mb-4">Administración de Pedidos</h2>
         
-        <div class="row">
-
-            <!-- Ejemplo de un pedido -->
-            <div class="col-md-4">
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <h5 class="card-title">Cliente: Juan Pérez</h5>
-                        <p class="card-text">Zona de entrega: San José</p>
-                        <p class="card-text">Precio: $75.00</p>
-                    </div>
-                    <div class="card-footer text-center">
-                        <div class="btn-group" role="group" aria-label="Acciones">
-                            <button type="button" class="btn btn-primary mx-1 rounded-2">Detalles</button>
-                            <button type="button" class="btn btn-danger mx-1 rounded-2" onclick="eliminarPedido('Juan Pérez')">Eliminar</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Ejemplo de otro pedido -->
-            <div class="col-md-4">
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <h5 class="card-title">Cliente: María Rodríguez</h5>
-                        <p class="card-text">Zona de entrega: Guanacaste</p>
-                        <p class="card-text">Precio: $120.00</p>
-                    </div>
-                    <div class="card-footer text-center">
-                        <div class="btn-group" role="group" aria-label="Acciones">
-                            <button type="button" class="btn btn-primary mx-1 rounded-2">Detalles</button>
-                            <button type="button" class="btn btn-danger mx-1 rounded-2" onclick="eliminarPedido('María Rodríguez')">Eliminar</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Ejemplo de otro pedido -->
-            <div class="col-md-4">
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <h5 class="card-title">Cliente: Carlos Rojas</h5>
-                        <p class="card-text">Zona de entrega: Puntarenas</p>
-                        <p class="card-text">Precio: $90.00</p>
-                    </div>
-                    <div class="card-footer text-center">
-                        <div class="btn-group" role="group" aria-label="Acciones">
-                            <button type="button" class="btn btn-primary mx-1 rounded-2">Detalles</button>
-                            <button type="button" class="btn btn-danger mx-1 rounded-2" onclick="eliminarPedido('Carlos Rojas')">Eliminar</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Más pedidos aquí... -->
-
+        <div class="row" id="orderContainer">
+            <!-- Los pedidos se cargarán aquí dinámicamente -->
         </div>
     </div>
 
-    <footer class="bg-dark text-light text-center py-3">
+    <footer class="footer">
         <p>&copy; 2024 Momentos Boutique. Todos los derechos reservados.</p>
     </footer>
 
@@ -143,11 +90,113 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     <script>
-        // Simulación de función para eliminar pedido (puedes implementar esto con tu lógica real)
-        function eliminarPedido(nombreCliente) {
-            if (confirm('¿Estás seguro de eliminar el pedido de ' + nombreCliente + '?')) {
-                // Aquí puedes implementar la lógica para eliminar el pedido correspondiente
-                alert('Pedido eliminado correctamente.');
+        $(document).ready(function() {
+            loadOrders();
+        });
+
+        function loadOrders() {
+            $.ajax({
+                type: "GET",
+                url: "http://localhost:8090/api/orders", // Asegúrate de que esta URL sea correcta para tu entorno
+                success: function(orders) {
+                    var orderContainer = $("#orderContainer");
+                    orderContainer.empty(); // Limpia el contenedor antes de agregar los pedidos
+                    orders.forEach(function(order) {
+                        var orderCard = `
+                            <div class="col-md-4">
+                                <div class="card mb-3">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Pedido ID: ${order.domainOrderId}</h5>
+                                        <p class="card-text">Cliente ID: ${order.domainOrderUserId}</p>
+                                        <p class="card-text">Zona de entrega: ${order.domainOrderLocation}</p>
+                                        <p class="card-text">Descripción: ${order.domainOrderDescription}</p>
+                                        <p class="card-text">Estado: <button type="button" class="btn btn-${getStatusClass(order.domainOrderStatus)}" onclick="toggleOrderStatus(${order.domainOrderId}, this)">
+                                            ${order.domainOrderStatus}
+                                        </button></p>
+                                    </div>
+                                    <div class="card-footer text-center">
+                                        <div class="btn-group" role="group" aria-label="Acciones">
+                                            <button type="button" class="btn btn-danger mx-1 rounded-2" onclick="deleteOrder(${order.domainOrderId})">Eliminar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        orderContainer.append(orderCard);
+                    });
+                },
+                error: function(err) {
+                    alert("Error al cargar los pedidos");
+                    console.error(err);
+                }
+            });
+        }
+
+        function getStatusClass(status) {
+            switch(status) {
+                case 'Pendiente':
+                    return 'secondary';
+                case 'En camino':
+                    return 'warning';
+                case 'Recibido':
+                    return 'success';
+                default:
+                    return 'secondary';
+            }
+        }
+
+        function toggleOrderStatus(orderId, button) {
+            const currentStatus = button.textContent.trim();
+            let newStatus;
+            
+            if (currentStatus === 'Pendiente') {
+                newStatus = 'En camino';
+                button.classList.remove('btn-secondary');
+                button.classList.add('btn-warning');
+            } else if (currentStatus === 'En camino') {
+                newStatus = 'Recibido';
+                button.classList.remove('btn-warning');
+                button.classList.add('btn-success');
+            } else {
+                newStatus = 'Pendiente';
+                button.classList.remove('btn-success');
+                button.classList.add('btn-secondary');
+            }
+
+            button.textContent = newStatus;
+
+            $.ajax({
+                type: "PUT",
+                url: `http://localhost:8090/api/orders/updateStatus`,
+                data: $.param({ orderId: orderId, status: newStatus }),
+                contentType: "application/x-www-form-urlencoded",
+                success: function(response) {
+                    alert("Estado del pedido actualizado correctamente");
+                },
+                error: function(err) {
+                    alert("Error al actualizar el estado del pedido");
+                    console.error(err);
+                    button.textContent = currentStatus;
+                    button.classList.remove('btn-success', 'btn-warning', 'btn-secondary');
+                    button.classList.add(getStatusClass(currentStatus));
+                }
+            });
+        }
+
+        function deleteOrder(orderId) {
+            if (confirm("¿Estás seguro de que deseas eliminar este pedido?")) {
+                $.ajax({
+                    type: "DELETE",
+                    url: `http://localhost:8090/api/orders/${orderId}`,
+                    success: function(response) {
+                        alert("Pedido eliminado correctamente");
+                        loadOrders();
+                    },
+                    error: function(err) {
+                        alert("Error al eliminar el pedido");
+                        console.error(err);
+                    }
+                });
             }
         }
     </script>

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-08-19T20:01:59-0600",
+    date = "2024-08-20T16:15:32-0600",
     comments = "version: 1.5.3.Final, compiler: Eclipse JDT (IDE) 3.39.0.v20240725-1906, environment: Java 17.0.11 (Eclipse Adoptium)"
 )
 @Component
@@ -25,10 +25,10 @@ public class OrderMapperImpl implements OrderMapper {
 
         orderDomain.setDomainOrderId( order.getOrderId() );
         orderDomain.setDomainOrderLocation( order.getOrderLocation() );
-        orderDomain.setDomainOrderProductId( order.getOrderProductId() );
         orderDomain.setDomainOrderUserId( order.getOrderUserId() );
         orderDomain.setDomainOrderStatus( order.getOrderStatus() );
         orderDomain.setDomainOrderPaymentId( order.getOrderPaymentId() );
+        orderDomain.setDomainOrderDescription( order.getOrderDescription() );
 
         return orderDomain;
     }
@@ -57,10 +57,10 @@ public class OrderMapperImpl implements OrderMapper {
 
         order.setOrderId( orderDomain.getDomainOrderId() );
         order.setOrderLocation( orderDomain.getDomainOrderLocation() );
-        order.setOrderProductId( orderDomain.getDomainOrderProductId() );
         order.setOrderUserId( orderDomain.getDomainOrderUserId() );
         order.setOrderStatus( orderDomain.getDomainOrderStatus() );
         order.setOrderPaymentId( orderDomain.getDomainOrderPaymentId() );
+        order.setOrderDescription( orderDomain.getDomainOrderDescription() );
 
         return order;
     }

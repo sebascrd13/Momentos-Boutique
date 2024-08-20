@@ -22,14 +22,14 @@ public class Order {
     private int orderId;
     @Column(name = "direccion")
     private String orderLocation;
-    @Column(name = "id_producto")
-    private int orderProductId;
     @Column(name = "id_usuario")
     private int orderUserId;
     @Column(name = "estado")
     private String orderStatus;
     @Column(name = "id_pago")
     private int orderPaymentId;
+    @Column(name = "descripcion_pedido")
+    private String orderDescription;
 
     @OneToMany(mappedBy = "order")
     private List<OrderProduct> orderProducts = new ArrayList<>();
@@ -52,14 +52,6 @@ public class Order {
 
     public void setOrderLocation(String orderLocation) {
         this.orderLocation = orderLocation;
-    }
-
-    public int getOrderProductId() {
-        return orderProductId;
-    }
-
-    public void setOrderProductId(int orderProductId) {
-        this.orderProductId = orderProductId;
     }
 
     public int getOrderUserId() {
@@ -100,5 +92,13 @@ public class Order {
 
     public void setOrderPaymentId(int orderPaymentId) {
         this.orderPaymentId = orderPaymentId;
+    }
+
+    public String getOrderDescription() {
+        return orderDescription;
+    }
+
+    public void setOrderDescription(String orderDescription) {
+        this.orderDescription = orderDescription;
     }
 }

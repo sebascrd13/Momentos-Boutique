@@ -45,6 +45,16 @@ public class OrderRepository implements OrderDomainRepository {
     }
 
     @Override
+    public void updateOrderStatus(int domainOrderId, String status) {
+        Optional<Order> optionalOrder = orderDataRepository.findById(domainOrderId);
+        if (optionalOrder.isPresent()) {
+            Order order = optionalOrder.get();
+            order.setOrderStatus(status);
+            orderDataRepository.save(order);
+        }
+    }
+
+    @Override
     public void deleteOrder(int domainOrderId) {
         orderDataRepository.deleteById(domainOrderId);
     }

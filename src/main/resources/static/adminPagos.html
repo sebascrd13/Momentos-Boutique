@@ -81,50 +81,10 @@
         </div>
     </nav>
     
-
     <div class="container mt-5" id="Contenido">
         <h2 class="mb-4">Administración de Pagos</h2>
-        
-        <div class="row">
-
-            <!-- Ejemplo de un pago -->
-            <div class="col-md-6">
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <h5 class="card-title">ID de Pago: #12345</h5>
-                        <p class="card-text">Fecha: 2024-04-16</p>
-                        <p class="card-text">Monto: $50.00</p>
-                        <p class="card-text">Estado: Completado</p>
-                    </div>
-                    <div class="card-footer text-center">
-                        <div class="btn-group" role="group" aria-label="Acciones">
-                            <button type="button" class="btn btn-primary mx-1 rounded-2" onclick="window.location.href = 'detallePago.html';">Detalles</button>
-                            <button type="button" class="btn btn-danger mx-1 rounded-2">Eliminar</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Otro ejemplo de pago -->
-            <div class="col-md-6">
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <h5 class="card-title">ID de Pago: #12346</h5>
-                        <p class="card-text">Fecha: 2024-04-15</p>
-                        <p class="card-text">Monto: $30.00</p>
-                        <p class="card-text">Estado: Pendiente</p>
-                    </div>
-                    <div class="card-footer text-center">
-                        <div class="btn-group" role="group" aria-label="Acciones">
-                            <button type="button" class="btn btn-primary mx-1 rounded-2">Detalles</button>
-                            <button type="button" class="btn btn-danger mx-1 rounded-2">Eliminar</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Más pagos aquí... -->
-
+        <div class="row" id="payment-list">
+            <!-- Los pagos se cargarán aquí dinámicamente -->
         </div>
     </div>
 
@@ -135,5 +95,45 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $.ajax({
+                url: "http://localhost:8090/api/payments", // Asegúrate de que la URL sea correcta
+                type: "GET",
+                success: function(payments) {
+                    let paymentList = $("#payment-list");
+                    payments.forEach(function(payment) {
+                        paymentList.append(`
+                            <div class="col-md-6">
+                                <div class="card mb-3">
+                                    <div class="row no-gutters">
+                                        <div class="col-md-4 d-flex align-items-center">
+                                            <img src="http://localhost:8090/${payment.domainImageData}" class="card-img m-2" alt="Comprobante">
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="card-body">
+                                                <h5 class="card-title">ID de Pago: #${payment.domainIdPayment}</h5>
+                                                <p class="card-text">Fecha: ${new Date(payment.domainPaymentDate).toLocaleDateString()}</p>
+                                                <p class="card-text">Monto: $${payment.domainPaymentTotalCost}</p>
+                                                <p class="card-text">Método de Pago: ${payment.domainPaymentMethod}</p>
+                                            </div>
+                                            <div class="card-footer text-center">
+                                                <div class="btn-group" role="group" aria-label="Acciones">
+                                                    <button type="button" class="btn btn-danger mx-1 rounded-2">Eliminar</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `);
+                    });
+                },
+                error: function(err) {
+                    console.error("Error al obtener los pagos:", err);
+                }
+            });
+        });
+    </script>
 </body>
 </html>

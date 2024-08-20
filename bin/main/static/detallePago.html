@@ -18,11 +18,11 @@
         }
 
         .navbar {
-            background-color: #000000dc; /* Cambiar el color del navbar */
+            background-color: #000000dc;
         }
 
         .navbar-dark .navbar-nav .nav-link {
-            color: #fff; /* Cambiar el color del texto del navbar */
+            color: #fff;
         }
         .btn-primary {
             margin-top: 4px;
@@ -41,79 +41,76 @@
         .btn-primary:focus {
             box-shadow: none;
         }
-        /* Añade espacio entre los botones de editar y eliminar */
-        .btn-group > .btn {
-            margin-right: 10px;
-        }
 
         .footer {
-            background-color: #000000dc; /* Cambiar el color del footer */
+            background-color: #000000dc;
             color: #fff;
             text-align: center;
             padding: 20px 0;
             width: 100%;
         }
     </style>
-                </head>
-                <body>
-                
-                    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-                        <div class="container">
-                            <a class="navbar-brand" href="index.html">
-                                <img src="img/Logo.jpg" alt="Logo de Momentos Boutique" style="width: 100px; height: 70px;">
-                            </a>
-                            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                                <span class="navbar-toggler-icon"></span>
-                            </button>
-                            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                                <ul class="navbar-nav">
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="index.html">Inicio</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="adminPagos.html">Atras</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link active" href="adminPagos.html">Administrar Pagos</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </nav>
-                    
-                
-                    <div class="container mt-5" id="Contenido">
-                        <h2 class="mb-4">Detalle de Pago</h2>
-                        
-                        <div class="card mb-3">
-                            <div class="card-body">
-                                <h5 class="card-title">ID de Pago: #12345</h5>
-                                <p class="card-text">Fecha: 2024-04-16</p>
-                                <p class="card-text">Monto: $50.00</p>
-                                <p class="card-text">Estado: Completado</p>
-                                <p class="card-text">Método de Pago: Tarjeta de Crédito</p>
-                                <p class="card-text">Número de Tarjeta: **** **** **** 1234</p>
-                                <p class="card-text">Titular de la Tarjeta: John Doe</p>
-                                <p class="card-text">Fecha de Expiración: 12/24</p>
-                            </div>
-                            <div class="card-footer text-center">
-                                <div class="btn-group" role="group" aria-label="Acciones">
-                                    <button type="button" class="btn btn-primary mx-1 rounded-2" onclick="window.location.href = 'editarDetallePago.html';">Detalles</button>
-                                    <button type="button" class="btn btn-danger mx-1 rounded-2">Eliminar</button>
-                                </div>
-                            </div>
-                        </div>
-                
-                    </div>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <img src="img/Logo.jpg" alt="Logo de Momentos Boutique" style="width: 100px; height: 70px;">
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Inicio</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
+    <div class="container mt-5" id="Contenido">
+        <h2 class="mb-4">Detalle de Pago</h2>
+        
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title" id="payment-id"></h5>
+                <p class="card-text" id="payment-date"></p>
+                <p class="card-text" id="total-amount"></p>
+                <p class="card-text" id="payment-status"></p>
+                <p class="card-text" id="payment-method"></p>
+                <p class="card-text" id="order-location"></p>
+                <p class="card-text" id="order-description"></p>
+            </div>
+            <div class="card-footer text-center">
+                <div class="btn-group" role="group" aria-label="Acciones">
+                    <button type="button" class="btn btn-primary mx-1 rounded-2" onclick="window.location.href = 'editarDetallePago.html';">Detalles</button>
+                    <button type="button" class="btn btn-danger mx-1 rounded-2">Eliminar</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <footer class="bg-dark text-light text-center py-3">
         <p>&copy; 2024 Momentos Boutique. Todos los derechos reservados.</p>
     </footer>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        function getQueryParameter(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById("payment-id").innerText = "ID de Pago: #" + getQueryParameter("paymentId");
+            document.getElementById("payment-date").innerText = "Fecha: " + getQueryParameter("paymentDate");
+            document.getElementById("total-amount").innerText = "Monto: $" + getQueryParameter("totalCost");
+            document.getElementById("payment-status").innerText = "Estado: " + getQueryParameter("paymentStatus");
+            document.getElementById("payment-method").innerText = "Método de Pago: " + getQueryParameter("paymentMethod");
+            document.getElementById("order-location").innerText = "Dirección de Envío: " + getQueryParameter("orderLocation");
+            document.getElementById("order-description").innerText = "Descripción del Pedido: " + getQueryParameter("orderDescription");
+        });
+    </script>
 </body>
 </html>

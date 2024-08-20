@@ -3,10 +3,10 @@ package com.boutique.momentos.domain.domainentity;
 public class OrderDomain {
     private int domainOrderId;
     private String domainOrderLocation;
-    private int domainOrderProductId;
     private int domainOrderUserId;
     private String domainOrderStatus;
     private int domainOrderPaymentId;
+    private String domainOrderDescription;
 
     public int getDomainOrderId() {
         return domainOrderId;
@@ -19,12 +19,6 @@ public class OrderDomain {
     }
     public void setDomainOrderLocation(String domainOrderLocation) {
         this.domainOrderLocation = domainOrderLocation;
-    }
-    public int getDomainOrderProductId() {
-        return domainOrderProductId;
-    }
-    public void setDomainOrderProductId(int domainOrderProductId) {
-        this.domainOrderProductId = domainOrderProductId;
     }
     public int getDomainOrderUserId() {
         return domainOrderUserId;
@@ -43,5 +37,11 @@ public class OrderDomain {
     }
     public void setDomainOrderPaymentId(int domainOrderPaymentId) {
         this.domainOrderPaymentId = domainOrderPaymentId;
+    }
+    public String getDomainOrderDescription() {
+        return domainOrderDescription;
+    }
+    public void setDomainOrderDescription(String domainOrderDescription) {
+        this.domainOrderDescription = domainOrderDescription;
     }
 }

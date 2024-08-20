@@ -3,7 +3,10 @@ package com.boutique.momentos.presentation.controller;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.Principal;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +30,8 @@ public class PaymentController {
     @Autowired
     private ClientService clientService;
 
+    private static String UPLOADED_FOLDER = "src/main/resources/static/img/";
+
     @GetMapping
     public ResponseEntity<List<PaymentDomain>> getAllPayments() {
         List<PaymentDomain> payments = paymentService.getAll();
@@ -49,25 +54,34 @@ public class PaymentController {
 
     @PostMapping("/upload")
     public ResponseEntity<PaymentDomain> savePayment(@RequestParam("image") MultipartFile imageFile,
-                                                    @RequestParam("paymentMethod") String paymentMethod,
-                                                    Principal principal) {
+                                                     @RequestParam("paymentMethod") String paymentMethod,
+                                                     @RequestParam("totalCost") Integer totalCost,
+                                                     Principal principal) {
         if (imageFile.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+        
         try {
             String username = principal.getName();
             User user = clientService.getClientByUsername(username);
-            byte[] imageData = imageFile.getBytes();
+            
+            byte[] bytes = imageFile.getBytes();
+            String filename = imageFile.getOriginalFilename();
+            Path path = Paths.get(UPLOADED_FOLDER + filename);
+            Files.write(path, bytes);
+    
             PaymentDomain payment = new PaymentDomain();
             payment.setDomainIdUser(user.getIdUser());
-            payment.setDomainImageData(imageData);
-            LocalDateTime paymentDate = LocalDateTime.now();
-            payment.setDomainPaymentDate(paymentDate);
+            payment.setDomainImageData("img/" + filename);
+            payment.setDomainPaymentDate(LocalDateTime.now());
             payment.setDomainPaymentStatus(false);
             payment.setDomainPaymentMethod(paymentMethod);
+            payment.setDomainPaymentTotalCost(totalCost);
+    
             PaymentDomain savedPayment = paymentService.savePayment(payment);
             return new ResponseEntity<>(savedPayment, HttpStatus.CREATED);
-        } catch (Exception e) {
+            
+        } catch (IOException e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }

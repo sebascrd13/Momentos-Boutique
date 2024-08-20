@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 public class PaymentDomain {
     private int domainIdPayment;
     private int domainIdUser;
-    private byte[] domainImageData;
+    private String domainImageData;
     private LocalDateTime domainPaymentDate;
     private boolean domainPaymentStatus;
     private String domainPaymentMethod;
@@ -23,10 +23,10 @@ public class PaymentDomain {
     public void setDomainIdUser(int domainIdUser) {
         this.domainIdUser = domainIdUser;
     }
-    public byte[] getDomainImageData() {
+    public String getDomainImageData() {
         return domainImageData;
     }
-    public void setDomainImageData(byte[] domainImageData) {
+    public void setDomainImageData(String domainImageData) {
         this.domainImageData = domainImageData;
     }
     public boolean isDomainPaymentStatus() {

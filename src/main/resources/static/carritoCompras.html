@@ -63,6 +63,9 @@
                         <a class="nav-link" href="productos.html">Productos</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="clienteGuia.html">Pedidos</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="contacto.html">Contacto</a>
                     </li>
                     <li class="nav-item active">
@@ -99,43 +102,49 @@
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="paymentModalLabel">Subir Comprobante del Pago</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+<div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="paymentModalLabel">Subir Comprobante del Pago</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Resumen de productos -->
+                <div id="cart-summary"></div>
+                
+                <!-- Dirección de envío -->
+                <div class="mb-3">
+                    <label for="shippingAddress" class="form-label">Dirección de Envío:</label>
+                    <input type="text" class="form-control" id="shippingAddress" required>
                 </div>
-                <div class="modal-body">
-                    <!-- Resumen de productos -->
-                    <div id="cart-summary"></div>
-                    
-                    <!-- Selección de método de pago -->
-                    <div class="mb-3">
-                        <label for="paymentMethod" class="form-label">Seleccione el método de pago:</label>
-                        <select class="form-select" id="paymentMethod">
-                            <option value="Transferencia">Transferencia</option>
-                            <option value="SinpeMovil">Sinpe Móvil</option>
-                            <option value="Paypal">Paypal</option>
-                            <option value="Otro">Otro</option>
-                        </select>
-                    </div>
 
-                    <!-- Subir comprobante -->
-                    <form id="paymentForm" onsubmit="uploadImage(event)">
-                        <div class="mb-3">
-                            <label for="paymentImage" class="form-label">Subir Comprobante del Pago:</label>
-                            <input type="file" class="form-control" id="paymentImage" required>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                            <button type="submit" class="btn btn-primary">Realizar Pedido</button>
-                        </div>
-                    </form>
+                <!-- Selección de método de pago -->
+                <div class="mb-3">
+                    <label for="paymentMethod" class="form-label">Seleccione el método de pago:</label>
+                    <select class="form-select" id="paymentMethod">
+                        <option value="Transferencia">Transferencia</option>
+                        <option value="SinpeMovil">Sinpe Móvil</option>
+                        <option value="Paypal">Paypal</option>
+                        <option value="Otro">Otro</option>
+                    </select>
                 </div>
+
+                <!-- Subir comprobante -->
+                <form id="paymentForm" onsubmit="uploadImage(event)">
+                    <div class="mb-3">
+                        <label for="paymentImage" class="form-label">Subir Comprobante del Pago:</label>
+                        <input type="file" class="form-control" id="paymentImage" required>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Realizar Pedido</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
+</div>
 
     <footer class="bg-dark text-light text-center py-3 mt-5">
         <div class="container">
@@ -205,18 +214,19 @@
             });
         }
 
+        // Función para eliminar los elementos seleccionados
         function deleteSelectedItems() {
             const selectedItems = $(".select-item:checked");
             selectedItems.each(function() {
-                const productId = $(this).data('id'); // Asegúrate de que `data-id` se corresponda con el parámetro `productId`
+                const productId = $(this).data('id');
                 $.ajax({
                     type: "DELETE",
-                    url: `/api/cart/delete?productId=${productId}`, // Enviar el `productId` como parámetro de consulta
+                    url: "/api/cart/delete/" + productId,
                     success: function() {
-                        loadCart(); // Vuelve a cargar el carrito para reflejar el cambio
+                        loadCart(); // Recargar el carrito después de eliminar
                     },
                     error: function(xhr, status, error) {
-                        console.error(`Error al eliminar el producto con ID ${productId}:`, error);
+                        console.error("Error al eliminar el producto:", error);
                     }
                 });
             });
@@ -228,8 +238,7 @@
                 type: "DELETE",
                 url: "/api/cart/clear",
                 success: function() {
-                    $("#cart-items").empty();
-                    $("#total-amount").text("Monto Total: $0.00");
+                    loadCart(); // Recargar el carrito después de vaciar
                 },
                 error: function(xhr, status, error) {
                     console.error("Error al vaciar el carrito:", error);
@@ -237,23 +246,27 @@
             });
         }
 
-        // Función para proceder al pago
+        // Función para manejar el pago y abrir el modal
         function checkout() {
             $('#paymentModal').modal('show');
         }
 
-        // Cargar el carrito al cargar la página
-        $(document).ready(function() {
-            loadCart();
-        });
-
-        // Función para enviar la imagen al servidor
+        // Función para subir el comprobante del pago
         function uploadImage(event) {
             event.preventDefault();
+
             var formData = new FormData();
             var imageFile = document.getElementById("paymentImage").files[0];
+            var paymentMethod = $("#paymentMethod").val();
+            var shippingAddress = $("#shippingAddress").val();
+            var totalCost = parseFloat($("#total-amount").text().replace('Monto Total: $', '').trim());
+            var orderDescription = $("#cart-summary").text(); // Obtener la descripción del pedido del resumen
+
             formData.append("image", imageFile);
-            formData.append("paymentMethod", $("#paymentMethod").val());
+            formData.append("paymentMethod", paymentMethod);
+            formData.append("orderLocation", shippingAddress);
+            formData.append("orderDescription", orderDescription); // Incluir la descripción del pedido
+            formData.append("totalCost", totalCost);
 
             $.ajax({
                 type: "POST",
@@ -261,14 +274,42 @@
                 data: formData,
                 contentType: false,
                 processData: false,
-                success: function (response) {
-                    console.log("Comprobante subido exitosamente:", response);
+                success: function (uploadResponse) {
+                    console.log("Comprobante subido exitosamente:", uploadResponse);
+
+                    var orderPaymentId = uploadResponse.domainIdPayment;
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/api/orders",
+                        data: {
+                            orderLocation: shippingAddress,
+                            orderDescription: orderDescription,
+                            orderPaymentId: orderPaymentId
+                        },
+                        success: function (createOrderResponse) {
+                            console.log("Pedido creado exitosamente:", createOrderResponse);
+                            var orderId = createOrderResponse.orderId;
+                            var paymentDate = uploadResponse.paymentDate;
+                            var paymentStatus = uploadResponse.paymentStatus;
+
+                            window.location.href = `detallePago.html?orderId=${orderId}&paymentId=${orderId}&totalCost=${totalCost}&paymentMethod=${paymentMethod}&orderLocation=${shippingAddress}&paymentDate=${paymentDate}&paymentStatus=${paymentStatus}`;
+                        },
+                        error: function (xhr, status, error) {
+                            console.error("Error al crear el pedido:", error);
+                        }
+                    });
                 },
                 error: function (xhr, status, error) {
                     console.error("Error al subir el comprobante:", error);
                 }
             });
         }
+
+        // Cargar el carrito al cargar la página
+        $(document).ready(function() {
+            loadCart();
+        });
     </script>
 </body>
 </html>

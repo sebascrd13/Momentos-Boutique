@@ -1,0 +1,69 @@
+<script>
+    $(document).ready(function() {
+        loadClientData();
+
+        $('#editClientForm').on('submit', function(event) {
+            event.preventDefault();
+            updateClientData();
+        });
+    });
+
+    function loadClientData() {
+        fetch('/api/client/current')
+            .then(response => response.json())
+            .then(data => {
+                const userId = data.userId;
+                if (userId) {
+                    $.ajax({
+                        type: "GET",
+                        url: `/api/clientes/${userId}`,
+                        success: function(client) {
+                            $('#clientName').val(client.name);
+                            $('#clientDireccion').val(client.direccion);
+                            $('#clientCiudad').val(client.ciudad);
+                            $('#clientTelefono').val(client.telefono);
+                            $('#clientEmail').val(client.email);
+                        },
+                        error: function(err) {
+                            alert("Error al cargar los datos del cliente");
+                            console.error(err);
+                        }
+                    });
+                } else {
+                    alert("No se encontró el ID del usuario.");
+                }
+            })
+            .catch(error => console.error('Error fetching user data:', error));
+    }
+
+    function updateClientData() {
+        fetch('/api/client/current')
+            .then(response => response.json())
+            .then(data => {
+                const userId = data.userId;
+                var formData = {
+                    name: $('#clientName').val(),
+                    direccion: $('#clientDireccion').val(),
+                    ciudad: $('#clientCiudad').val(),
+                    telefono: $('#clientTelefono').val(),
+                    email: $('#clientEmail').val()
+                };
+
+                $.ajax({
+                    type: "PUT",
+                    url: `/api/clientes/${userId}`,
+                    data: JSON.stringify(formData),
+                    contentType: "application/json",
+                    success: function(response) {
+                        alert("Cliente actualizado exitosamente");
+                        window.location.href = "adminClientes.html";
+                    },
+                    error: function(err) {
+                        alert("Error al actualizar el cliente");
+                        console.error(err);
+                    }
+                });
+            })
+            .catch(error => console.error('Error fetching user data:', error));
+    }
+</script>

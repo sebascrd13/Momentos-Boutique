@@ -15,10 +15,10 @@ public interface OrderMapper {
     @Mappings({
         @Mapping(source = "orderId", target = "domainOrderId"),
         @Mapping(source = "orderLocation", target = "domainOrderLocation"),
-        @Mapping(source = "orderProductId", target = "domainOrderProductId"),
         @Mapping(source = "orderUserId", target = "domainOrderUserId"),
         @Mapping(source = "orderStatus", target = "domainOrderStatus"),
         @Mapping(source = "orderPaymentId", target = "domainOrderPaymentId"),
+        @Mapping(source = "orderDescription", target = "domainOrderDescription"),
     })
 
     OrderDomain toOrder (Order order);

@@ -21,7 +21,7 @@ public class Payment {
     @Column(name = "id_usuario")
     private int idUser;
     @Column(name = "imagen")
-    private byte[] imageData;
+    private String imageData;
     @Column(name = "fecha")
     private LocalDateTime paymentDate;
     @Column(name = "estado")
@@ -51,11 +51,11 @@ public class Payment {
         this.idUser = idUser;
     }
 
-    public byte[] getImageData() {
+    public String getImageData() {
         return imageData;
     }
 
-    public void setImageData(byte[] imageData) {
+    public void setImageData(String imageData) {
         this.imageData = imageData;
     }
 
@@ -89,5 +89,13 @@ public class Payment {
 
     public void setPaymentMethod(String paymentMethod) {
         this.paymentMethod = paymentMethod;
+    }
+
+    public int getPaymentTotalCost() {
+        return paymentTotalCost;
+    }
+
+    public void setPaymentTotalCost(int paymentTotalCost) {
+        this.paymentTotalCost = paymentTotalCost;
     }
 }

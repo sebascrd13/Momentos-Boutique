@@ -23,29 +23,6 @@
         h1 {
             text-align: center;
         }
-        form {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
-        input[type="text"] {
-            padding: 10px;
-            width: 300px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            margin-right: 10px;
-        }
-        input[type="submit"] {
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        input[type="submit"]:hover {
-            background-color: #0056b3;
-        }
         table {
             width: 100%;
             border-collapse: collapse;
@@ -74,11 +51,7 @@
     
 <div class="container">
     <h1>Rastreo de Productos</h1>
-    <form action="#" method="post">
-        <input type="text" name="tracking_code" placeholder="Ingrese el código de rastreo...">
-        <input type="submit" value="Buscar">
-    </form>
-    <table>
+    <table id="ordersTable">
         <thead>
             <tr>
                 <th>Producto</th>
@@ -87,24 +60,43 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>Producto 1</td>
-                <td>Cliente A</td>
-                <td class="pending">Pendiente</td>
-            </tr>
-            <tr>
-                <td>Producto 2</td>
-                <td>Cliente B</td>
-                <td class="shipped">En camino</td>
-            </tr>
-            <tr>
-                <td>Producto 3</td>
-                <td>Cliente C</td>
-                <td class="received">Recibido</td>
-            </tr>
+            <!-- Aquí se cargarán los pedidos -->
         </tbody>
     </table>
 </div>
+
+<script>
+    // Función para obtener el nombre del cliente
+    async function getCustomerName(userId) {
+        const response = await fetch(`http://localhost:8090/api/clientes/${userId}`);
+        const data = await response.json();
+        return data.name;
+    }
+
+    // Función para cargar los pedidos
+    async function loadOrders() {
+        const ordersTable = document.getElementById('ordersTable').getElementsByTagName('tbody')[0];
+        const response = await fetch('http://localhost:8090/api/orders'); // Suponiendo que este es el endpoint para obtener los pedidos
+        const orders = await response.json();
+
+        for (let order of orders) {
+            const customerName = await getCustomerName(order.domainOrderUserId);
+
+            const row = ordersTable.insertRow();
+            const productCell = row.insertCell(0);
+            const customerCell = row.insertCell(1);
+            const statusCell = row.insertCell(2);
+
+            productCell.innerHTML = order.domainOrderDescription;
+            customerCell.innerHTML = customerName;
+            statusCell.innerHTML = order.domainOrderStatus;
+            statusCell.className = order.domainOrderStatus.toLowerCase(); // Agregar clase según el estado
+        }
+    }
+
+    // Cargar los pedidos al cargar la página
+    document.addEventListener('DOMContentLoaded', loadOrders);
+</script>
 
 </body>
 </html>
