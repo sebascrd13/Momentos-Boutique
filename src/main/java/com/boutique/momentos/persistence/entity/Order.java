@@ -31,9 +31,6 @@ public class Order {
     @Column(name = "descripcion_pedido")
     private String orderDescription;
 
-    @OneToMany(mappedBy = "order")
-    private List<OrderProduct> orderProducts = new ArrayList<>();
-
     @ManyToOne
     @JoinColumn(name = "id_usuario", insertable = false, updatable = false)
     private User user;
@@ -69,15 +66,7 @@ public class Order {
     public void setUser(User user) {
         this.user = user;
     }
-
-    public List<OrderProduct> getOrderProducts() {
-        return orderProducts;
-    }
-
-    public void setOrderProducts(List<OrderProduct> orderProducts) {
-        this.orderProducts = orderProducts;
-    }
-
+    
     public String getOrderStatus() {
         return orderStatus;
     }

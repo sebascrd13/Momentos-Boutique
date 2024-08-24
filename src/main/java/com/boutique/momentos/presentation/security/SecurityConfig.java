@@ -36,10 +36,9 @@ public class SecurityConfig {
         auth.userDetailsService(userDetailsService);
     }
 
-    @SuppressWarnings("deprecation")
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return NoOpPasswordEncoder.getInstance();
+        return new BCryptPasswordEncoder();
     }
 
     @Bean

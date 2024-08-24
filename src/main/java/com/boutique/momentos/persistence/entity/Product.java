@@ -48,9 +48,6 @@ public class Product {
     @Column(name = "status")
     private String productStatus;
 
-    @OneToMany(mappedBy = "product")
-    private List<OrderProduct> orderProducts = new ArrayList<>();
-
     @OneToOne
     @JoinColumn(name = "id_categoria", insertable = false, updatable = false)
     private Category category;

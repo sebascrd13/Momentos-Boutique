@@ -3,6 +3,7 @@ package com.boutique.momentos.presentation.security;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -34,16 +35,20 @@ public class SecurityDatabaseInitializer {
 
                 User admin = new User();
                 admin.setUsername("admin1");
-                admin.setPassword("contrasena123");
+                admin.setPassword(passwordEncoder().encode("contrasena123"));
                 admin.setRole(adminRole);
                 userRepository.save(admin);
 
                 User user = new User();
                 user.setUsername("usuario1");
-                user.setPassword("contrasena456");
+                user.setPassword(passwordEncoder().encode("contrasena456"));
                 user.setRole(userRole);
                 userRepository.save(user);
             }
         };
+    }
+
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }
