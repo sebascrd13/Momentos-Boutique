@@ -286,11 +286,11 @@
                         },
                         success: function (createOrderResponse) {
                             console.log("Pedido creado exitosamente:", createOrderResponse);
-                            var orderId = createOrderResponse.orderId;
+                            var orderId = createOrderResponse.domainOrderId;
                             var paymentDate = uploadResponse.paymentDate;
                             var paymentStatus = uploadResponse.paymentStatus;
 
-                            window.location.href = `detallePago.html?orderId=${orderId}&paymentId=${orderId}&totalCost=${totalCost}&paymentMethod=${paymentMethod}&orderLocation=${shippingAddress}&paymentDate=${paymentDate}&paymentStatus=${paymentStatus}`;
+                            window.location.href = `detallePago.html?orderId=${orderId}&totalCost=${totalCost}&paymentMethod=${paymentMethod}&orderLocation=${shippingAddress}&paymentStatus=${"Pendiente"}&orderDescription=${orderDescription}`;
                         },
                         error: function (xhr, status, error) {
                             console.error("Error al crear el pedido:", error);

@@ -75,7 +75,7 @@
         
         <div class="card mb-3">
             <div class="card-body">
-                <h5 class="card-title" id="payment-id"></h5>
+                <h5 class="card-title" id="order-id"></h5>
                 <p class="card-text" id="payment-date"></p>
                 <p class="card-text" id="total-amount"></p>
                 <p class="card-text" id="payment-status"></p>
@@ -85,8 +85,7 @@
             </div>
             <div class="card-footer text-center">
                 <div class="btn-group" role="group" aria-label="Acciones">
-                    <button type="button" class="btn btn-primary mx-1 rounded-2" onclick="window.location.href = 'editarDetallePago.html';">Detalles</button>
-                    <button type="button" class="btn btn-danger mx-1 rounded-2">Eliminar</button>
+                    <button type="button" class="btn btn-primary mx-1 rounded-2" onclick="window.location.href = 'pedidos.html';">Ver mis pedidos</button>
                 </div>
             </div>
         </div>
@@ -102,9 +101,19 @@
             return urlParams.get(name);
         }
 
+        function getCurrentDate() {
+            const now = new Date();
+            const day = String(now.getDate()).padStart(2, '0');
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const year = now.getFullYear();
+            return `${year}-${month}-${day}`;
+        }
+
         document.addEventListener("DOMContentLoaded", function() {
-            document.getElementById("payment-id").innerText = "ID de Pago: #" + getQueryParameter("paymentId");
-            document.getElementById("payment-date").innerText = "Fecha: " + getQueryParameter("paymentDate");
+            document.getElementById("order-id").innerText = "ID de Pedido: #" + getQueryParameter("orderId");
+            const paymentDate = getCurrentDate();
+            document.getElementById("payment-date").innerText = "Fecha: " + paymentDate;
+
             document.getElementById("total-amount").innerText = "Monto: $" + getQueryParameter("totalCost");
             document.getElementById("payment-status").innerText = "Estado: " + getQueryParameter("paymentStatus");
             document.getElementById("payment-method").innerText = "Método de Pago: " + getQueryParameter("paymentMethod");
