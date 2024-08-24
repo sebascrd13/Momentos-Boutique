@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rastreo de Productos</title>
+    <title>Rastreo de Pedidos</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         html, body {
@@ -147,41 +147,50 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            fetch('/api/clientes/user/rol')
-                .then(response => response.text())
-                .then(role => {
-                    if (role === 'Administrador') {
-                        document.getElementById('admin-tab').style.display = 'block';
-                    }
-                })
-                .catch(error => console.error('Error fetching user role:', error));
-
+            async function getUserRole() {
+                const response = await fetch('/api/clientes/user/rol');
+                return response.text();
+            }
+    
+            async function getUserId() {
+                const response = await fetch('/api/clientes/id');
+                return response.text();
+            }
+    
             async function getCustomerName(userId) {
                 const response = await fetch(`http://localhost:8090/api/clientes/${userId}`);
                 const data = await response.json();
                 return data.name;
             }
-
+    
             async function loadOrders() {
                 const ordersTable = document.getElementById('ordersTable').getElementsByTagName('tbody')[0];
-                const response = await fetch('http://localhost:8090/api/orders');
+                const role = await getUserRole();
+    
+                let url = 'http://localhost:8090/api/orders';
+    
+                if (role === 'Cliente') {
+                    url = 'http://localhost:8090/api/orders/user';
+                }
+    
+                const response = await fetch(url);
                 const orders = await response.json();
-
+    
                 for (let order of orders) {
-                    const customerName = await getCustomerName(order.domainOrderUserId);
-
+                    const customerName = role === 'Cliente' ? 'You' : await getCustomerName(order.domainOrderUserId);
+    
                     const row = ordersTable.insertRow();
                     const productCell = row.insertCell(0);
                     const customerCell = row.insertCell(1);
                     const statusCell = row.insertCell(2);
-
+    
                     productCell.innerHTML = order.domainOrderDescription;
                     customerCell.innerHTML = customerName;
                     statusCell.innerHTML = order.domainOrderStatus;
                     statusCell.className = order.domainOrderStatus.toLowerCase();
                 }
             }
-
+    
             loadOrders();
         });
     </script>

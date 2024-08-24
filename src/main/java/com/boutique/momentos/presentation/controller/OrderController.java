@@ -58,10 +58,18 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.CREATED).body(createdOrder);
     }
 
-    @GetMapping("/{orderId}")
+    @GetMapping("/{domainOrderId}")
     public ResponseEntity<OrderDomain> getOrderById(@PathVariable int orderId) {
         Optional<OrderDomain> order = orderService.getOrderById(orderId);
         return order.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/user")
+    public ResponseEntity<List<OrderDomain>> getOrdersByUser(Principal principal) {
+        String username = principal.getName();
+        User user = clientService.getClientByUsername(username);
+        List<OrderDomain> orders = orderService.getOrdersByUserId(user.getIdUser());
+        return ResponseEntity.ok(orders);
     }
 
     @DeleteMapping("/{orderId}")
