@@ -110,6 +110,8 @@
             document.getElementById("payment-method").innerText = "Método de Pago: " + getQueryParameter("paymentMethod");
             document.getElementById("order-location").innerText = "Dirección de Envío: " + getQueryParameter("orderLocation");
             document.getElementById("order-description").innerText = "Descripción del Pedido: " + getQueryParameter("orderDescription");
+
+            checkAdminStatus();
         });
     </script>
 </body>

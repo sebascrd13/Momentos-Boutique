@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rastreo de Productos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            flex: 1;
+            margin-top: 20px; /* Margin between header and main content */
+        }
+        .btn-primary {
+            margin-top: 40px;
+            background-color: #fbc2eb;
+            border-color: #fbc2eb;
+            color: #000;
+            font-weight: bold;
+            text-transform: uppercase;
+            transition: background-color 0.3s ease;
+        }
+        .btn-primary:hover {
+            background-color: #ff89c0;
+            border-color: #ff89c0;
+            color: #fff;
+        }
+        .btn-primary:focus {
+            box-shadow: none;
+        }
+        .nav-link img {
+            width: 20px;
+            height: 20px;
+        }
+        .nav-link img.cart-icon {
+            filter: invert(50%);
+        }
+        .card-img-top {
+            width: 300px;
+            height: 200px;
+            object-fit: cover;
+            margin: auto;
+            display: block;
+        }
+        footer {
+            background-color: #000;
+            color: #fff;
+            text-align: center;
+            padding: 10px 0;
+            margin-top: auto; /* Pushes the footer to the bottom */
+        }
+        /* Estilo para el área de contenido */
+        .content-area {
+            background-color: #f8f9fa; /* Color de fondo claro para el área de contenido */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra ligera alrededor del área de contenido */
+        }
+        h1 {
+            margin-top: 20px; /* Espacio arriba del título */
+            margin-bottom: 20px; /* Espacio abajo del título */
+            font-size: 2rem; /* Tamaño del texto del título */
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f1f1f1;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+    </style>
+</head>
+<body>
+    <!-- Barra de navegación -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <img src="img/Logo.jpg" alt="Logo de Momentos Boutique" style="width: 100px; height: 70px;">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="productos.html">Productos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Pedidos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="contacto.html">Contacto</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="carritoCompras.html">
+                            <img src="img/Carrito.png" alt="Carrito de compras" class="cart-icon">
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contenido principal -->
+    <div class="container content-area">
+        <h1>Mis pedidos</h1>
+        <table id="ordersTable">
+            <thead>
+                <tr>
+                    <th>Pedido</th>
+                    <th>Cliente</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Aquí se cargarán los pedidos -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Momentos Boutique. Todos los derechos reservados.</p>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            fetch('/api/clientes/user/rol')
+                .then(response => response.text())
+                .then(role => {
+                    if (role === 'Administrador') {
+                        document.getElementById('admin-tab').style.display = 'block';
+                    }
+                })
+                .catch(error => console.error('Error fetching user role:', error));
+
+            async function getCustomerName(userId) {
+                const response = await fetch(`http://localhost:8090/api/clientes/${userId}`);
+                const data = await response.json();
+                return data.name;
+            }
+
+            async function loadOrders() {
+                const ordersTable = document.getElementById('ordersTable').getElementsByTagName('tbody')[0];
+                const response = await fetch('http://localhost:8090/api/orders');
+                const orders = await response.json();
+
+                for (let order of orders) {
+                    const customerName = await getCustomerName(order.domainOrderUserId);
+
+                    const row = ordersTable.insertRow();
+                    const productCell = row.insertCell(0);
+                    const customerCell = row.insertCell(1);
+                    const statusCell = row.insertCell(2);
+
+                    productCell.innerHTML = order.domainOrderDescription;
+                    customerCell.innerHTML = customerName;
+                    statusCell.innerHTML = order.domainOrderStatus;
+                    statusCell.className = order.domainOrderStatus.toLowerCase();
+                }
+            }
+
+            loadOrders();
+        });
+    </script>
+</body>
+</html>

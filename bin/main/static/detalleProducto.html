@@ -29,17 +29,16 @@
         .card-img-top {
             width: 300px;
             height: 200px;
-            object-fit: cover; /* Para asegurar que la imagen se ajuste correctamente */
-            margin: auto; /* Para centrar horizontalmente */
-            display: block; 
+            object-fit: cover;
+            margin: auto;
+            display: block;
         }
-        /* Estilos Carrito Compras */
         .nav-link img {
-            width: 20px; /* Ajusta el ancho del ícono */
-            height: 20px; /* Ajusta la altura del ícono */
+            width: 20px;
+            height: 20px;
         }
         .nav-link img.cart-icon {
-            filter: invert(50%); /* Invierte el color del ícono a blanco */
+            filter: invert(50%);
         }
         .btn-back {
             position: absolute;
@@ -68,10 +67,13 @@
                         <a class="nav-link active" aria-current="page" href="#">Productos</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="pedidos.html">Pedidos</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="contacto.html">Contacto</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="carrito.html">
+                        <a class="nav-link" href="carritoCompras.html">
                             <img src="http://localhost:8090/img/Carrito.png" alt="Carrito de compras" class="cart-icon">
                         </a>
                     </li>
@@ -137,26 +139,29 @@
                     }
                 });
             });
-        });
 
-        function loadProductDetails(productId) {
-            $.ajax({
-                type: "GET",
-                url: `http://localhost:8090/api/products/${productId}`,
-                success: function(product) {
-                    $("#productImage").attr("src", `http://localhost:8090/${product.domainProductImagePath}`);
-                    $("#productName").text(product.domainProductName);
-                    $("#productDescription").text(product.domainProductDescription);
-                    $("#productPrice").text(`Precio: $${product.domainProductPrice}`);
-                    $("#productStock").text(`Existencias: ${product.domainProductStock}`);
-                    $("#productSizes").text(`Tallas Disponibles: ${product.domainProductSize}`);
-                },
-                error: function(err) {
-                    alert("Error al cargar los detalles del producto");
-                    console.error(err);
-                }
-            });
-        }
+            // Función para cargar los detalles del producto
+            function loadProductDetails(productId) {
+                $.ajax({
+                    type: "GET",
+                    url: `http://localhost:8090/api/products/${productId}`,
+                    success: function(product) {
+                        $("#productImage").attr("src", `http://localhost:8090/${product.domainProductImagePath}`);
+                        $("#productName").text(product.domainProductName);
+                        $("#productDescription").text(product.domainProductDescription);
+                        $("#productPrice").text(`Precio: $${product.domainProductPrice}`);
+                        $("#productStock").text(`Existencias: ${product.domainProductStock}`);
+                        $("#productSizes").text(`Tallas Disponibles: ${product.domainProductSize}`);
+                    },
+                    error: function(err) {
+                        alert("Error al cargar los detalles del producto");
+                        console.error(err);
+                    }
+                });
+            }
+
+
+        });
     </script>
 </body>
 </html>

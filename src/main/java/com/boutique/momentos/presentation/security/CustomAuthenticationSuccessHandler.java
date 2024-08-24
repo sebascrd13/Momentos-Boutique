@@ -28,18 +28,11 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         String username = userDetails.getUsername();
 
-        System.out.println(username);
-
         User user = clientService.getClientByUsername(username);
 
         String redirectUrl;
-        if (user.getRole().getId() == 1) {
-            redirectUrl = "/indexAdmin.html";
-        } else if (user.getRole().getId() == 2) {
-            redirectUrl = "/index.html";
-        } else {
-            redirectUrl = "/login.html";
-        }
+
+        redirectUrl = "/index.html";
 
         response.sendRedirect(redirectUrl);
     }

@@ -1,5 +1,6 @@
 package com.boutique.momentos.presentation.controller;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.boutique.momentos.persistence.entity.User;
@@ -37,13 +37,23 @@ public class ClientController {
         return client.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/user/rol")
+    public ResponseEntity<String> getUserRole(Principal principal) {
+        if (principal != null) {
+            String username = principal.getName();
+            User user = clientService.getClientByUsername(username);
+            return ResponseEntity.ok(user.getRole().getName());
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<User> updateClient(
             @PathVariable("id") int id,
             @RequestBody User user) {
 
         try {
-            user.setIdUser(id); 
+            user.setIdUser(id);
             User updatedClient = clientService.updateClient(user);
             return new ResponseEntity<>(updatedClient, HttpStatus.OK);
         } catch (Exception e) {

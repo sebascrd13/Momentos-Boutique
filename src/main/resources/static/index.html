@@ -70,6 +70,9 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
+                    <li id="admin-tab" class="nav-item" style="display: none;">
+                        <a class="nav-link" href="admin.html">Admin</a>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="#">Inicio</a>
                     </li>
@@ -77,7 +80,7 @@
                         <a class="nav-link" href="productos.html">Productos</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="clienteGuia.html">Pedidos</a>
+                        <a class="nav-link" href="pedidos.html">Pedidos</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="contacto.html">Contacto</a>
@@ -88,10 +91,10 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="btn btn-secondary logout-btn" href="/logout">Cerrar sesión</a>
+                        <a class="btn btn-secondary logout-btn" href="http://localhost:8090/editarCliente.html?id=1">Editar Perfil</a>
                     </li>
                     <li class="nav-item">
-                        <a class="btn btn-secondary logout-btn" href="http://localhost:8090/editarCliente.html?id=1">Editar Perfil</a>
+                        <a class="btn btn-secondary logout-btn" href="/logout">Cerrar sesión</a>
                     </li>
                 </ul>
             </div>
@@ -121,10 +124,18 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
+            fetch('/api/clientes/user/rol')
+                .then(response => response.text())
+                .then(role => {
+                    if (role === 'Administrador') {
+                        document.getElementById('admin-tab').style.display = 'block';
+                    }
+                })
+                .catch(error => console.error('Error fetching user role:', error));
+
             fetch('/api/products')
                 .then(response => response.json())
                 .then(data => {
-                    // Filtrar productos destacados
                     const featuredProducts = data.filter(product => product.domainProductStatus === 'Destacado');
 
                     const featuredProductsContainer = document.getElementById('featured-products');
